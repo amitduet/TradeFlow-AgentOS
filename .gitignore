@@ -1,0 +1,17 @@
+# Local Codex prompts and scratch notes
+.codex-prompts/
+*.prompt.local.txt
+*.notes.local.txt
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+
+# Local environment
+.env
+.DS_Store

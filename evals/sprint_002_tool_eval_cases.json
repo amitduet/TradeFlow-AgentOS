@@ -1,0 +1,144 @@
+[
+  {
+    "case_id": "sprint_002_case_001_customer_profile",
+    "description": "Get a customer profile with rating and contact person.",
+    "tool_name": "get_customer_profile",
+    "input": {
+      "customer_id": "CUST-001"
+    },
+    "expected_key_outputs": {
+      "id": "CUST-001",
+      "rating": 5,
+      "contact_person.email": "contact1@example-tradeflow.test"
+    }
+  },
+  {
+    "case_id": "sprint_002_case_002_supplier_profile",
+    "description": "Get a supplier profile with contact person.",
+    "tool_name": "get_supplier_profile",
+    "input": {
+      "supplier_id": "SUP-002"
+    },
+    "expected_key_outputs": {
+      "id": "SUP-002",
+      "country": "Vietnam",
+      "contact_person.designation": "Export Sales Lead"
+    }
+  },
+  {
+    "case_id": "sprint_002_case_003_customer_sales_orders",
+    "description": "Get sales orders for one customer.",
+    "tool_name": "list_sales_orders",
+    "input": {
+      "customer_id": "CUST-001"
+    },
+    "expected_key_outputs": {
+      "$length": 2,
+      "$all.customer_id": "CUST-001",
+      "0.id": "SO-1001",
+      "1.id": "SO-1019"
+    }
+  },
+  {
+    "case_id": "sprint_002_case_004_drop_shipping_chain",
+    "description": "Get the drop-shipping chain for a sales order with a linked purchase order draft.",
+    "tool_name": "get_drop_shipping_chain",
+    "input": {
+      "sales_order_id": "SO-1002"
+    },
+    "expected_key_outputs": {
+      "sales_order.id": "SO-1002",
+      "customer.id": "CUST-002",
+      "purchase_order_drafts.0.related_sales_order_id": "SO-1002",
+      "suppliers.0.id": "SUP-002",
+      "logistics_events.0.related_sales_order_id": "SO-1002"
+    }
+  },
+  {
+    "case_id": "sprint_002_case_005_logistics_events",
+    "description": "Get logistics events for a sales order.",
+    "tool_name": "list_logistics_events",
+    "input": {
+      "sales_order_id": "SO-1002"
+    },
+    "expected_key_outputs": {
+      "$length": 3,
+      "$all.related_sales_order_id": "SO-1002",
+      "0.event_type": "booking_created"
+    }
+  },
+  {
+    "case_id": "sprint_002_case_006_order_margin",
+    "description": "Calculate order margin.",
+    "tool_name": "calculate_order_margin",
+    "input": {
+      "order_id": "SO-1001"
+    },
+    "expected_key_outputs": {
+      "order_id": "SO-1001",
+      "revenue": 2880.0,
+      "estimated_cost": 1920.0,
+      "gross_margin": 960.0,
+      "gross_margin_percent": 33.33
+    }
+  },
+  {
+    "case_id": "sprint_002_case_007_low_customer_rating_risk",
+    "description": "Detect low customer rating risk.",
+    "tool_name": "detect_order_risk",
+    "input": {
+      "order_id": "SO-1003"
+    },
+    "expected_key_outputs": {
+      "order_id": "SO-1003",
+      "risk_level": "medium"
+    },
+    "expected_risk_flags": [
+      "low_customer_rating"
+    ]
+  },
+  {
+    "case_id": "sprint_002_case_008_missing_po_risk",
+    "description": "Detect missing PO risk for drop-shipping.",
+    "tool_name": "detect_order_risk",
+    "input": {
+      "order_id": "SO-1005"
+    },
+    "expected_key_outputs": {
+      "order_id": "SO-1005",
+      "risk_level": "high"
+    },
+    "expected_risk_flags": [
+      "missing_linked_po_for_drop_shipping"
+    ]
+  },
+  {
+    "case_id": "sprint_002_case_009_delayed_logistics_risk",
+    "description": "Detect delayed logistics risk.",
+    "tool_name": "detect_order_risk",
+    "input": {
+      "order_id": "SO-1006"
+    },
+    "expected_key_outputs": {
+      "order_id": "SO-1006",
+      "risk_level": "medium"
+    },
+    "expected_risk_flags": [
+      "delayed_logistics_event"
+    ]
+  },
+  {
+    "case_id": "sprint_002_case_010_unrelated_customer_orders",
+    "description": "Confirm unrelated customer orders are not returned.",
+    "tool_name": "list_sales_orders",
+    "input": {
+      "customer_id": "CUST-004"
+    },
+    "expected_key_outputs": {
+      "$length": 2,
+      "$all.customer_id": "CUST-004",
+      "0.id": "SO-1004",
+      "1.id": "SO-1014"
+    }
+  }
+]

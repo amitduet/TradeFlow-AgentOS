@@ -1,0 +1,1673 @@
+{
+  "customers": [
+    {
+      "billing_address": "101 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact1@example-tradeflow.test",
+        "name": "Aster Rahman",
+        "phone": "+880-1800-821510"
+      },
+      "id": "CUST-001",
+      "name": "Aster Retail Group",
+      "phone_number": "+880-1700-644991",
+      "rating": 5,
+      "shipping_address": "Warehouse Gate 1, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "102 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact2@example-tradeflow.test",
+        "name": "Blue Rahman",
+        "phone": "+880-1800-464505"
+      },
+      "id": "CUST-002",
+      "name": "Blue Harbor Traders",
+      "phone_number": "+880-1700-869223",
+      "rating": 4,
+      "shipping_address": "Warehouse Gate 2, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "103 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact3@example-tradeflow.test",
+        "name": "Cedar Rahman",
+        "phone": "+880-1800-984453"
+      },
+      "id": "CUST-003",
+      "name": "Cedar Lane Wholesale",
+      "phone_number": "+880-1700-195744",
+      "rating": 2,
+      "shipping_address": "Warehouse Gate 3, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "104 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact4@example-tradeflow.test",
+        "name": "Delta Rahman",
+        "phone": "+880-1800-898337"
+      },
+      "id": "CUST-004",
+      "name": "Delta Mart Supplies",
+      "phone_number": "+880-1700-845235",
+      "rating": 3,
+      "shipping_address": "Warehouse Gate 4, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "105 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact5@example-tradeflow.test",
+        "name": "Eastern Rahman",
+        "phone": "+880-1800-256458"
+      },
+      "id": "CUST-005",
+      "name": "Eastern Bazaar Co",
+      "phone_number": "+880-1700-737203",
+      "rating": 5,
+      "shipping_address": "Warehouse Gate 5, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "106 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact6@example-tradeflow.test",
+        "name": "Futura Rahman",
+        "phone": "+880-1800-128670"
+      },
+      "id": "CUST-006",
+      "name": "Futura Home Goods",
+      "phone_number": "+880-1700-710226",
+      "rating": 4,
+      "shipping_address": "Warehouse Gate 6, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "107 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact7@example-tradeflow.test",
+        "name": "Greenline Rahman",
+        "phone": "+880-1800-172561"
+      },
+      "id": "CUST-007",
+      "name": "Greenline Distribution",
+      "phone_number": "+880-1700-194172",
+      "rating": 3,
+      "shipping_address": "Warehouse Gate 7, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "108 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact8@example-tradeflow.test",
+        "name": "Harborview Rahman",
+        "phone": "+880-1800-432367"
+      },
+      "id": "CUST-008",
+      "name": "Harborview Medical",
+      "phone_number": "+880-1700-809318",
+      "rating": 2,
+      "shipping_address": "Warehouse Gate 8, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "109 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact9@example-tradeflow.test",
+        "name": "Indigo Rahman",
+        "phone": "+880-1800-607344"
+      },
+      "id": "CUST-009",
+      "name": "Indigo Office Mart",
+      "phone_number": "+880-1700-114979",
+      "rating": 4,
+      "shipping_address": "Warehouse Gate 9, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "110 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact10@example-tradeflow.test",
+        "name": "Jasmine Rahman",
+        "phone": "+880-1800-936976"
+      },
+      "id": "CUST-010",
+      "name": "Jasmine Food Service",
+      "phone_number": "+880-1700-772570",
+      "rating": 5,
+      "shipping_address": "Warehouse Gate 10, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "111 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact11@example-tradeflow.test",
+        "name": "Kite Rahman",
+        "phone": "+880-1800-275800"
+      },
+      "id": "CUST-011",
+      "name": "Kite Electronics",
+      "phone_number": "+880-1700-450229",
+      "rating": 3,
+      "shipping_address": "Warehouse Gate 11, TradeFlow Industrial Park"
+    },
+    {
+      "billing_address": "112 Finance Avenue, Dhaka Demo Zone",
+      "contact_person": {
+        "designation": "Procurement Manager",
+        "email": "contact12@example-tradeflow.test",
+        "name": "Lotus Rahman",
+        "phone": "+880-1800-110414"
+      },
+      "id": "CUST-012",
+      "name": "Lotus Metro Stores",
+      "phone_number": "+880-1700-765553",
+      "rating": 4,
+      "shipping_address": "Warehouse Gate 12, TradeFlow Industrial Park"
+    }
+  ],
+  "invoice_summaries": [
+    {
+      "amount": 2880.0,
+      "customer_id": "CUST-001",
+      "due_date": "2026-02-07",
+      "id": "INV-3001",
+      "invoice_date": "2026-01-08",
+      "sales_order_id": "SO-1001",
+      "status": "paid"
+    },
+    {
+      "amount": 2016.0,
+      "customer_id": "CUST-002",
+      "due_date": "2026-02-08",
+      "id": "INV-3002",
+      "invoice_date": "2026-01-09",
+      "sales_order_id": "SO-1002",
+      "status": "paid"
+    },
+    {
+      "amount": 4050.0,
+      "customer_id": "CUST-003",
+      "due_date": "2026-02-09",
+      "id": "INV-3003",
+      "invoice_date": "2026-01-10",
+      "sales_order_id": "SO-1003",
+      "status": "issued"
+    },
+    {
+      "amount": 1840.0,
+      "customer_id": "CUST-004",
+      "due_date": "2026-02-10",
+      "id": "INV-3004",
+      "invoice_date": "2026-01-11",
+      "sales_order_id": "SO-1004",
+      "status": "issued"
+    },
+    {
+      "amount": 2640.0,
+      "customer_id": "CUST-005",
+      "due_date": "2026-02-11",
+      "id": "INV-3005",
+      "invoice_date": "2026-01-12",
+      "sales_order_id": "SO-1005",
+      "status": "paid"
+    },
+    {
+      "amount": 3200.0,
+      "customer_id": "CUST-006",
+      "due_date": "2026-02-12",
+      "id": "INV-3006",
+      "invoice_date": "2026-01-13",
+      "sales_order_id": "SO-1006",
+      "status": "issued"
+    },
+    {
+      "amount": 2376.0,
+      "customer_id": "CUST-007",
+      "due_date": "2026-02-13",
+      "id": "INV-3007",
+      "invoice_date": "2026-01-14",
+      "sales_order_id": "SO-1007",
+      "status": "overdue"
+    },
+    {
+      "amount": 4940.0,
+      "customer_id": "CUST-008",
+      "due_date": "2026-02-14",
+      "id": "INV-3008",
+      "invoice_date": "2026-01-15",
+      "sales_order_id": "SO-1008",
+      "status": "issued"
+    },
+    {
+      "amount": 4760.0,
+      "customer_id": "CUST-009",
+      "due_date": "2026-02-15",
+      "id": "INV-3009",
+      "invoice_date": "2026-01-16",
+      "sales_order_id": "SO-1009",
+      "status": "issued"
+    },
+    {
+      "amount": 2160.0,
+      "customer_id": "CUST-010",
+      "due_date": "2026-02-16",
+      "id": "INV-3010",
+      "invoice_date": "2026-01-17",
+      "sales_order_id": "SO-1010",
+      "status": "paid"
+    },
+    {
+      "amount": 4180.0,
+      "customer_id": "CUST-011",
+      "due_date": "2026-02-17",
+      "id": "INV-3011",
+      "invoice_date": "2026-01-18",
+      "sales_order_id": "SO-1011",
+      "status": "issued"
+    },
+    {
+      "amount": 1740.0,
+      "customer_id": "CUST-012",
+      "due_date": "2026-02-18",
+      "id": "INV-3012",
+      "invoice_date": "2026-01-19",
+      "sales_order_id": "SO-1012",
+      "status": "issued"
+    },
+    {
+      "amount": 1160.0,
+      "customer_id": "CUST-002",
+      "due_date": "2026-02-19",
+      "id": "INV-3013",
+      "invoice_date": "2026-01-20",
+      "sales_order_id": "SO-1013",
+      "status": "issued"
+    },
+    {
+      "amount": 2475.0,
+      "customer_id": "CUST-004",
+      "due_date": "2026-02-20",
+      "id": "INV-3014",
+      "invoice_date": "2026-01-21",
+      "sales_order_id": "SO-1014",
+      "status": "paid"
+    },
+    {
+      "amount": 3000.0,
+      "customer_id": "CUST-006",
+      "due_date": "2026-02-21",
+      "id": "INV-3015",
+      "invoice_date": "2026-01-22",
+      "sales_order_id": "SO-1015",
+      "status": "issued"
+    }
+  ],
+  "logistics_events": [
+    {
+      "event_date": "2026-01-07",
+      "event_type": "booking_created",
+      "id": "LOG-0001",
+      "location": "Dhaka Control Tower",
+      "notes": "Shipment booking created.",
+      "related_sales_order_id": "SO-1001",
+      "status": "planned"
+    },
+    {
+      "event_date": "2026-01-08",
+      "event_type": "picked_up",
+      "id": "LOG-0002",
+      "location": "Origin Hub",
+      "notes": "Cargo picked up from origin.",
+      "related_sales_order_id": "SO-1001",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-06",
+      "event_type": "delivered",
+      "id": "LOG-0003",
+      "location": "Customer Dock",
+      "notes": "Delivery completed in synthetic record.",
+      "related_sales_order_id": "SO-1001",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-08",
+      "event_type": "booking_created",
+      "id": "LOG-0004",
+      "location": "Dhaka Control Tower",
+      "notes": "Shipment booking created.",
+      "related_sales_order_id": "SO-1002",
+      "status": "planned"
+    },
+    {
+      "event_date": "2026-01-09",
+      "event_type": "picked_up",
+      "id": "LOG-0005",
+      "location": "Origin Hub",
+      "notes": "Cargo picked up from origin.",
+      "related_sales_order_id": "SO-1002",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-07",
+      "event_type": "delivered",
+      "id": "LOG-0006",
+      "location": "Customer Dock",
+      "notes": "Delivery completed in synthetic record.",
+      "related_sales_order_id": "SO-1002",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-09",
+      "event_type": "booking_created",
+      "id": "LOG-0007",
+      "location": "Dhaka Control Tower",
+      "notes": "Shipment booking created.",
+      "related_sales_order_id": "SO-1003",
+      "status": "planned"
+    },
+    {
+      "event_date": "2026-01-10",
+      "event_type": "picked_up",
+      "id": "LOG-0008",
+      "location": "Origin Hub",
+      "notes": "Cargo picked up from origin.",
+      "related_sales_order_id": "SO-1003",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-08",
+      "event_type": "delivered",
+      "id": "LOG-0009",
+      "location": "Customer Dock",
+      "notes": "Delivery completed in synthetic record.",
+      "related_sales_order_id": "SO-1003",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-10",
+      "event_type": "booking_created",
+      "id": "LOG-0010",
+      "location": "Dhaka Control Tower",
+      "notes": "Shipment booking created.",
+      "related_sales_order_id": "SO-1004",
+      "status": "planned"
+    },
+    {
+      "event_date": "2026-01-11",
+      "event_type": "picked_up",
+      "id": "LOG-0011",
+      "location": "Origin Hub",
+      "notes": "Cargo picked up from origin.",
+      "related_sales_order_id": "SO-1004",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-09",
+      "event_type": "delivered",
+      "id": "LOG-0012",
+      "location": "Customer Dock",
+      "notes": "Delivery completed in synthetic record.",
+      "related_sales_order_id": "SO-1004",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-11",
+      "event_type": "booking_created",
+      "id": "LOG-0013",
+      "location": "Dhaka Control Tower",
+      "notes": "Shipment booking created.",
+      "related_sales_order_id": "SO-1005",
+      "status": "planned"
+    },
+    {
+      "event_date": "2026-01-12",
+      "event_type": "picked_up",
+      "id": "LOG-0014",
+      "location": "Origin Hub",
+      "notes": "Cargo picked up from origin.",
+      "related_sales_order_id": "SO-1005",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-10",
+      "event_type": "delivered",
+      "id": "LOG-0015",
+      "location": "Customer Dock",
+      "notes": "Delivery completed in synthetic record.",
+      "related_sales_order_id": "SO-1005",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-12",
+      "event_type": "booking_created",
+      "id": "LOG-0016",
+      "location": "Dhaka Control Tower",
+      "notes": "Shipment booking created.",
+      "related_sales_order_id": "SO-1006",
+      "status": "planned"
+    },
+    {
+      "event_date": "2026-01-13",
+      "event_type": "picked_up",
+      "id": "LOG-0017",
+      "location": "Origin Hub",
+      "notes": "Cargo picked up from origin.",
+      "related_sales_order_id": "SO-1006",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-11",
+      "event_type": "delay_reported",
+      "id": "LOG-0018",
+      "location": "Chittagong Port",
+      "notes": "Carrier reported customs delay against expected delivery.",
+      "related_sales_order_id": "SO-1006",
+      "status": "delayed"
+    },
+    {
+      "event_date": "2026-01-13",
+      "event_type": "booking_created",
+      "id": "LOG-0019",
+      "location": "Dhaka Control Tower",
+      "notes": "Shipment booking created.",
+      "related_sales_order_id": "SO-1007",
+      "status": "planned"
+    },
+    {
+      "event_date": "2026-01-14",
+      "event_type": "picked_up",
+      "id": "LOG-0020",
+      "location": "Origin Hub",
+      "notes": "Cargo picked up from origin.",
+      "related_sales_order_id": "SO-1007",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-12",
+      "event_type": "delivered",
+      "id": "LOG-0021",
+      "location": "Customer Dock",
+      "notes": "Delivery completed in synthetic record.",
+      "related_sales_order_id": "SO-1007",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-14",
+      "event_type": "booking_created",
+      "id": "LOG-0022",
+      "location": "Dhaka Control Tower",
+      "notes": "Shipment booking created.",
+      "related_sales_order_id": "SO-1008",
+      "status": "planned"
+    },
+    {
+      "event_date": "2026-01-15",
+      "event_type": "picked_up",
+      "id": "LOG-0023",
+      "location": "Origin Hub",
+      "notes": "Cargo picked up from origin.",
+      "related_sales_order_id": "SO-1008",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-13",
+      "event_type": "delivered",
+      "id": "LOG-0024",
+      "location": "Customer Dock",
+      "notes": "Delivery completed in synthetic record.",
+      "related_sales_order_id": "SO-1008",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-15",
+      "event_type": "booking_created",
+      "id": "LOG-0025",
+      "location": "Dhaka Control Tower",
+      "notes": "Shipment booking created.",
+      "related_sales_order_id": "SO-1009",
+      "status": "planned"
+    },
+    {
+      "event_date": "2026-01-16",
+      "event_type": "picked_up",
+      "id": "LOG-0026",
+      "location": "Origin Hub",
+      "notes": "Cargo picked up from origin.",
+      "related_sales_order_id": "SO-1009",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-14",
+      "event_type": "delivered",
+      "id": "LOG-0027",
+      "location": "Customer Dock",
+      "notes": "Delivery completed in synthetic record.",
+      "related_sales_order_id": "SO-1009",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-16",
+      "event_type": "booking_created",
+      "id": "LOG-0028",
+      "location": "Dhaka Control Tower",
+      "notes": "Shipment booking created.",
+      "related_sales_order_id": "SO-1010",
+      "status": "planned"
+    },
+    {
+      "event_date": "2026-01-17",
+      "event_type": "picked_up",
+      "id": "LOG-0029",
+      "location": "Origin Hub",
+      "notes": "Cargo picked up from origin.",
+      "related_sales_order_id": "SO-1010",
+      "status": "completed"
+    },
+    {
+      "event_date": "2026-01-15",
+      "event_type": "delivered",
+      "id": "LOG-0030",
+      "location": "Customer Dock",
+      "notes": "Delivery completed in synthetic record.",
+      "related_sales_order_id": "SO-1010",
+      "status": "completed"
+    }
+  ],
+  "payment_summaries": [
+    {
+      "amount_due": 0.0,
+      "amount_paid": 2880.0,
+      "customer_id": "CUST-001",
+      "due_date": "2026-02-07",
+      "id": "PAY-4001",
+      "invoice_id": "INV-3001",
+      "sales_order_id": "SO-1001",
+      "status": "paid"
+    },
+    {
+      "amount_due": 0.0,
+      "amount_paid": 2016.0,
+      "customer_id": "CUST-002",
+      "due_date": "2026-02-08",
+      "id": "PAY-4002",
+      "invoice_id": "INV-3002",
+      "sales_order_id": "SO-1002",
+      "status": "paid"
+    },
+    {
+      "amount_due": 4050.0,
+      "amount_paid": 0.0,
+      "customer_id": "CUST-003",
+      "due_date": "2026-02-09",
+      "id": "PAY-4003",
+      "invoice_id": "INV-3003",
+      "sales_order_id": "SO-1003",
+      "status": "not_due"
+    },
+    {
+      "amount_due": 1840.0,
+      "amount_paid": 0.0,
+      "customer_id": "CUST-004",
+      "due_date": "2026-02-10",
+      "id": "PAY-4004",
+      "invoice_id": "INV-3004",
+      "sales_order_id": "SO-1004",
+      "status": "not_due"
+    },
+    {
+      "amount_due": 0.0,
+      "amount_paid": 2640.0,
+      "customer_id": "CUST-005",
+      "due_date": "2026-02-11",
+      "id": "PAY-4005",
+      "invoice_id": "INV-3005",
+      "sales_order_id": "SO-1005",
+      "status": "paid"
+    },
+    {
+      "amount_due": 3200.0,
+      "amount_paid": 0.0,
+      "customer_id": "CUST-006",
+      "due_date": "2026-02-12",
+      "id": "PAY-4006",
+      "invoice_id": "INV-3006",
+      "sales_order_id": "SO-1006",
+      "status": "not_due"
+    },
+    {
+      "amount_due": 2376.0,
+      "amount_paid": 0.0,
+      "customer_id": "CUST-007",
+      "due_date": "2026-02-13",
+      "id": "PAY-4007",
+      "invoice_id": "INV-3007",
+      "sales_order_id": "SO-1007",
+      "status": "overdue"
+    },
+    {
+      "amount_due": 4940.0,
+      "amount_paid": 0.0,
+      "customer_id": "CUST-008",
+      "due_date": "2026-02-14",
+      "id": "PAY-4008",
+      "invoice_id": "INV-3008",
+      "sales_order_id": "SO-1008",
+      "status": "not_due"
+    },
+    {
+      "amount_due": 4760.0,
+      "amount_paid": 0.0,
+      "customer_id": "CUST-009",
+      "due_date": "2026-02-15",
+      "id": "PAY-4009",
+      "invoice_id": "INV-3009",
+      "sales_order_id": "SO-1009",
+      "status": "not_due"
+    },
+    {
+      "amount_due": 0.0,
+      "amount_paid": 2160.0,
+      "customer_id": "CUST-010",
+      "due_date": "2026-02-16",
+      "id": "PAY-4010",
+      "invoice_id": "INV-3010",
+      "sales_order_id": "SO-1010",
+      "status": "paid"
+    },
+    {
+      "amount_due": 4180.0,
+      "amount_paid": 0.0,
+      "customer_id": "CUST-011",
+      "due_date": "2026-02-17",
+      "id": "PAY-4011",
+      "invoice_id": "INV-3011",
+      "sales_order_id": "SO-1011",
+      "status": "not_due"
+    },
+    {
+      "amount_due": 1740.0,
+      "amount_paid": 0.0,
+      "customer_id": "CUST-012",
+      "due_date": "2026-02-18",
+      "id": "PAY-4012",
+      "invoice_id": "INV-3012",
+      "sales_order_id": "SO-1012",
+      "status": "not_due"
+    },
+    {
+      "amount_due": 1160.0,
+      "amount_paid": 0.0,
+      "customer_id": "CUST-002",
+      "due_date": "2026-02-19",
+      "id": "PAY-4013",
+      "invoice_id": "INV-3013",
+      "sales_order_id": "SO-1013",
+      "status": "not_due"
+    },
+    {
+      "amount_due": 0.0,
+      "amount_paid": 2475.0,
+      "customer_id": "CUST-004",
+      "due_date": "2026-02-20",
+      "id": "PAY-4014",
+      "invoice_id": "INV-3014",
+      "sales_order_id": "SO-1014",
+      "status": "paid"
+    },
+    {
+      "amount_due": 3000.0,
+      "amount_paid": 0.0,
+      "customer_id": "CUST-006",
+      "due_date": "2026-02-21",
+      "id": "PAY-4015",
+      "invoice_id": "INV-3015",
+      "sales_order_id": "SO-1015",
+      "status": "not_due"
+    }
+  ],
+  "products": [
+    {
+      "category": "Home Appliances",
+      "id": "PROD-001",
+      "name": "Portable Blender",
+      "sale_price": 72.0,
+      "sku": "TF-HOM-1001",
+      "standard_cost": 48.0,
+      "supplier_id": "SUP-001",
+      "unit": "pcs"
+    },
+    {
+      "category": "Office Equipment",
+      "id": "PROD-002",
+      "name": "Thermal Label Printer",
+      "sale_price": 168.0,
+      "sku": "TF-OFF-1002",
+      "standard_cost": 115.0,
+      "supplier_id": "SUP-002",
+      "unit": "pcs"
+    },
+    {
+      "category": "Textiles",
+      "id": "PROD-003",
+      "name": "Cotton Shop Towel",
+      "sale_price": 27.0,
+      "sku": "TF-TEX-1003",
+      "standard_cost": 18.0,
+      "supplier_id": "SUP-003",
+      "unit": "carton"
+    },
+    {
+      "category": "Electronics",
+      "id": "PROD-004",
+      "name": "LED Desk Lamp",
+      "sale_price": 36.0,
+      "sku": "TF-ELE-1004",
+      "standard_cost": 22.24,
+      "supplier_id": "SUP-004",
+      "unit": "pcs"
+    },
+    {
+      "category": "Housewares",
+      "id": "PROD-005",
+      "name": "Food Storage Container",
+      "sale_price": 24.0,
+      "sku": "TF-HOU-1005",
+      "standard_cost": 14.1,
+      "supplier_id": "SUP-005",
+      "unit": "carton"
+    },
+    {
+      "category": "Housewares",
+      "id": "PROD-006",
+      "name": "Stainless Flask",
+      "sale_price": 16.0,
+      "sku": "TF-HOU-1006",
+      "standard_cost": 9.58,
+      "supplier_id": "SUP-006",
+      "unit": "pcs"
+    },
+    {
+      "category": "Office Equipment",
+      "id": "PROD-007",
+      "name": "Barcode Scanner",
+      "sale_price": 132.0,
+      "sku": "TF-OFF-1007",
+      "standard_cost": 89.18,
+      "supplier_id": "SUP-007",
+      "unit": "pcs"
+    },
+    {
+      "category": "Food Service",
+      "id": "PROD-008",
+      "name": "Disposable Apron",
+      "sale_price": 19.0,
+      "sku": "TF-FOO-1008",
+      "standard_cost": 12.13,
+      "supplier_id": "SUP-008",
+      "unit": "case"
+    },
+    {
+      "category": "Electronics",
+      "id": "PROD-009",
+      "name": "USB-C Dock",
+      "sale_price": 68.0,
+      "sku": "TF-ELE-1009",
+      "standard_cost": 42.32,
+      "supplier_id": "SUP-001",
+      "unit": "pcs"
+    },
+    {
+      "category": "Cleaning",
+      "id": "PROD-010",
+      "name": "Microfiber Mop Kit",
+      "sale_price": 48.0,
+      "sku": "TF-CLE-1010",
+      "standard_cost": 31.28,
+      "supplier_id": "SUP-002",
+      "unit": "carton"
+    },
+    {
+      "category": "Medical Supplies",
+      "id": "PROD-011",
+      "name": "Nitrile Gloves",
+      "sale_price": 44.0,
+      "sku": "TF-MED-1011",
+      "standard_cost": 28.2,
+      "supplier_id": "SUP-003",
+      "unit": "case"
+    },
+    {
+      "category": "Store Fixtures",
+      "id": "PROD-012",
+      "name": "Retail Shelf Basket",
+      "sale_price": 29.0,
+      "sku": "TF-STO-1012",
+      "standard_cost": 17.28,
+      "supplier_id": "SUP-004",
+      "unit": "pcs"
+    },
+    {
+      "category": "Home Appliances",
+      "id": "PROD-013",
+      "name": "Rice Cooker",
+      "sale_price": 58.0,
+      "sku": "TF-HOM-1013",
+      "standard_cost": 37.88,
+      "supplier_id": "SUP-005",
+      "unit": "pcs"
+    },
+    {
+      "category": "Packaging",
+      "id": "PROD-014",
+      "name": "Shipping Carton XL",
+      "sale_price": 33.0,
+      "sku": "TF-PAC-1014",
+      "standard_cost": 19.99,
+      "supplier_id": "SUP-006",
+      "unit": "bundle"
+    },
+    {
+      "category": "Office Supplies",
+      "id": "PROD-015",
+      "name": "Thermal Receipt Roll",
+      "sale_price": 25.0,
+      "sku": "TF-OFF-1015",
+      "standard_cost": 14.92,
+      "supplier_id": "SUP-007",
+      "unit": "case"
+    },
+    {
+      "category": "Textiles",
+      "id": "PROD-016",
+      "name": "Cotton Tote Bag",
+      "sale_price": 39.0,
+      "sku": "TF-TEX-1016",
+      "standard_cost": 23.54,
+      "supplier_id": "SUP-008",
+      "unit": "carton"
+    },
+    {
+      "category": "Electronics",
+      "id": "PROD-017",
+      "name": "Handheld Fan",
+      "sale_price": 19.0,
+      "sku": "TF-ELE-1017",
+      "standard_cost": 10.96,
+      "supplier_id": "SUP-001",
+      "unit": "pcs"
+    },
+    {
+      "category": "Food Service",
+      "id": "PROD-018",
+      "name": "Chef Knife Set",
+      "sale_price": 54.0,
+      "sku": "TF-FOO-1018",
+      "standard_cost": 33.31,
+      "supplier_id": "SUP-002",
+      "unit": "set"
+    },
+    {
+      "category": "Electronics",
+      "id": "PROD-019",
+      "name": "Bluetooth Speaker",
+      "sale_price": 49.0,
+      "sku": "TF-ELE-1019",
+      "standard_cost": 29.16,
+      "supplier_id": "SUP-003",
+      "unit": "pcs"
+    },
+    {
+      "category": "Industrial",
+      "id": "PROD-020",
+      "name": "Warehouse Safety Vest",
+      "sale_price": 41.0,
+      "sku": "TF-IND-1020",
+      "standard_cost": 25.83,
+      "supplier_id": "SUP-004",
+      "unit": "carton"
+    },
+    {
+      "category": "Housewares",
+      "id": "PROD-021",
+      "name": "Ceramic Dinner Set",
+      "sale_price": 84.0,
+      "sku": "TF-HOU-1021",
+      "standard_cost": 52.3,
+      "supplier_id": "SUP-005",
+      "unit": "set"
+    },
+    {
+      "category": "Store Fixtures",
+      "id": "PROD-022",
+      "name": "POS Cash Drawer",
+      "sale_price": 97.0,
+      "sku": "TF-STO-1022",
+      "standard_cost": 64.71,
+      "supplier_id": "SUP-006",
+      "unit": "pcs"
+    },
+    {
+      "category": "Home Appliances",
+      "id": "PROD-023",
+      "name": "Air Purifier Filter",
+      "sale_price": 34.0,
+      "sku": "TF-HOM-1023",
+      "standard_cost": 21.0,
+      "supplier_id": "SUP-007",
+      "unit": "pcs"
+    },
+    {
+      "category": "Office Supplies",
+      "id": "PROD-024",
+      "name": "Invoice File Box",
+      "sale_price": 22.0,
+      "sku": "TF-OFF-1024",
+      "standard_cost": 12.81,
+      "supplier_id": "SUP-008",
+      "unit": "carton"
+    },
+    {
+      "category": "Packaging",
+      "id": "PROD-025",
+      "name": "Poly Mailer Pack",
+      "sale_price": 18.0,
+      "sku": "TF-PAC-1025",
+      "standard_cost": 9.92,
+      "supplier_id": "SUP-001",
+      "unit": "bundle"
+    }
+  ],
+  "purchase_order_drafts": [
+    {
+      "created_from_sales_order": true,
+      "id": "POD-2001",
+      "line_items": [
+        {
+          "product_id": "PROD-002",
+          "quantity": 12,
+          "unit_price": 115.0
+        }
+      ],
+      "notes": "Synthetic drop shipping draft; human approval still required.",
+      "purpose": "drop_shipping",
+      "related_sales_order_id": "SO-1002",
+      "status": "pending_approval",
+      "subtotal": 1380.0,
+      "supplier_id": "SUP-002"
+    },
+    {
+      "created_from_sales_order": true,
+      "id": "POD-2002",
+      "line_items": [
+        {
+          "product_id": "PROD-003",
+          "quantity": 150,
+          "unit_price": 18.0
+        }
+      ],
+      "notes": "Synthetic customer procurement draft; human approval still required.",
+      "purpose": "customer_procurement",
+      "related_sales_order_id": "SO-1003",
+      "status": "draft",
+      "subtotal": 2700.0,
+      "supplier_id": "SUP-003"
+    },
+    {
+      "created_from_sales_order": true,
+      "id": "POD-2003",
+      "line_items": [
+        {
+          "product_id": "PROD-006",
+          "quantity": 200,
+          "unit_price": 9.5
+        }
+      ],
+      "notes": "Synthetic customer procurement draft; human approval still required.",
+      "purpose": "customer_procurement",
+      "related_sales_order_id": "SO-1006",
+      "status": "pending_approval",
+      "subtotal": 1900.0,
+      "supplier_id": "SUP-006"
+    },
+    {
+      "created_from_sales_order": true,
+      "id": "POD-2004",
+      "line_items": [
+        {
+          "product_id": "PROD-009",
+          "quantity": 70,
+          "unit_price": 42.0
+        }
+      ],
+      "notes": "Synthetic drop shipping draft; human approval still required.",
+      "purpose": "drop_shipping",
+      "related_sales_order_id": "SO-1009",
+      "status": "approved_by_human",
+      "subtotal": 2940.0,
+      "supplier_id": "SUP-001"
+    },
+    {
+      "created_from_sales_order": true,
+      "id": "POD-2005",
+      "line_items": [
+        {
+          "product_id": "PROD-011",
+          "quantity": 95,
+          "unit_price": 28.0
+        }
+      ],
+      "notes": "Synthetic customer procurement draft; human approval still required.",
+      "purpose": "customer_procurement",
+      "related_sales_order_id": "SO-1011",
+      "status": "draft",
+      "subtotal": 2660.0,
+      "supplier_id": "SUP-003"
+    },
+    {
+      "created_from_sales_order": true,
+      "id": "POD-2006",
+      "line_items": [
+        {
+          "product_id": "PROD-013",
+          "quantity": 20,
+          "unit_price": 38.0
+        }
+      ],
+      "notes": "Synthetic drop shipping draft; human approval still required.",
+      "purpose": "drop_shipping",
+      "related_sales_order_id": "SO-1013",
+      "status": "pending_approval",
+      "subtotal": 760.0,
+      "supplier_id": "SUP-005"
+    },
+    {
+      "created_from_sales_order": true,
+      "id": "POD-2007",
+      "line_items": [
+        {
+          "product_id": "PROD-015",
+          "quantity": 120,
+          "unit_price": 15.0
+        }
+      ],
+      "notes": "Synthetic customer procurement draft; human approval still required.",
+      "purpose": "customer_procurement",
+      "related_sales_order_id": "SO-1015",
+      "status": "draft",
+      "subtotal": 1800.0,
+      "supplier_id": "SUP-007"
+    },
+    {
+      "created_from_sales_order": true,
+      "id": "POD-2008",
+      "line_items": [
+        {
+          "product_id": "PROD-017",
+          "quantity": 160,
+          "unit_price": 11.0
+        }
+      ],
+      "notes": "Synthetic drop shipping draft; human approval still required.",
+      "purpose": "drop_shipping",
+      "related_sales_order_id": "SO-1017",
+      "status": "pending_approval",
+      "subtotal": 1760.0,
+      "supplier_id": "SUP-001"
+    },
+    {
+      "created_from_sales_order": true,
+      "id": "POD-2009",
+      "line_items": [
+        {
+          "product_id": "PROD-018",
+          "quantity": 55,
+          "unit_price": 33.0
+        }
+      ],
+      "notes": "Synthetic customer procurement draft; human approval still required.",
+      "purpose": "customer_procurement",
+      "related_sales_order_id": "SO-1018",
+      "status": "draft",
+      "subtotal": 1815.0,
+      "supplier_id": "SUP-002"
+    },
+    {
+      "created_from_sales_order": true,
+      "id": "POD-2010",
+      "line_items": [
+        {
+          "product_id": "PROD-020",
+          "quantity": 130,
+          "unit_price": 26.0
+        }
+      ],
+      "notes": "Synthetic customer procurement draft; human approval still required.",
+      "purpose": "customer_procurement",
+      "related_sales_order_id": "SO-1020",
+      "status": "pending_approval",
+      "subtotal": 3380.0,
+      "supplier_id": "SUP-004"
+    },
+    {
+      "created_from_sales_order": false,
+      "id": "POD-2011",
+      "line_items": [
+        {
+          "product_id": "PROD-021",
+          "quantity": 40,
+          "unit_price": 52.0
+        }
+      ],
+      "notes": "Synthetic stock replenishment draft; human approval still required.",
+      "purpose": "stock_replenishment",
+      "related_sales_order_id": null,
+      "status": "draft",
+      "subtotal": 2080.0,
+      "supplier_id": "SUP-005"
+    },
+    {
+      "created_from_sales_order": false,
+      "id": "POD-2012",
+      "line_items": [
+        {
+          "product_id": "PROD-022",
+          "quantity": 30,
+          "unit_price": 64.0
+        }
+      ],
+      "notes": "Synthetic stock replenishment draft; human approval still required.",
+      "purpose": "stock_replenishment",
+      "related_sales_order_id": null,
+      "status": "draft",
+      "subtotal": 1920.0,
+      "supplier_id": "SUP-006"
+    }
+  ],
+  "sales_orders": [
+    {
+      "customer_id": "CUST-001",
+      "expected_delivery_date": "2026-01-19",
+      "fulfillment_type": "warehouse_stock",
+      "id": "SO-1001",
+      "incoterm": "CFR",
+      "line_items": [
+        {
+          "product_id": "PROD-001",
+          "quantity": 40,
+          "unit_price": 72.0
+        }
+      ],
+      "notes": "Synthetic warehouse_stock order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-05",
+      "risk_flags": [],
+      "status": "confirmed",
+      "subtotal": 2880.0
+    },
+    {
+      "customer_id": "CUST-002",
+      "expected_delivery_date": "2026-01-23",
+      "fulfillment_type": "drop_ship",
+      "id": "SO-1002",
+      "incoterm": "DAP",
+      "line_items": [
+        {
+          "product_id": "PROD-002",
+          "quantity": 12,
+          "unit_price": 168.0
+        }
+      ],
+      "notes": "Synthetic drop_ship order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-06",
+      "risk_flags": [],
+      "status": "in_transit",
+      "subtotal": 2016.0
+    },
+    {
+      "customer_id": "CUST-003",
+      "expected_delivery_date": "2026-01-17",
+      "fulfillment_type": "procurement",
+      "id": "SO-1003",
+      "incoterm": "FOB",
+      "line_items": [
+        {
+          "product_id": "PROD-003",
+          "quantity": 150,
+          "unit_price": 27.0
+        }
+      ],
+      "notes": "Synthetic procurement order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-07",
+      "risk_flags": [],
+      "status": "confirmed",
+      "subtotal": 4050.0
+    },
+    {
+      "customer_id": "CUST-004",
+      "expected_delivery_date": "2026-01-16",
+      "fulfillment_type": "warehouse_stock",
+      "id": "SO-1004",
+      "incoterm": "CIF",
+      "line_items": [
+        {
+          "product_id": "PROD-004",
+          "quantity": 80,
+          "unit_price": 23.0
+        }
+      ],
+      "notes": "Synthetic warehouse_stock order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-08",
+      "risk_flags": [
+        "thin_margin_review"
+      ],
+      "status": "confirmed",
+      "subtotal": 1840.0
+    },
+    {
+      "customer_id": "CUST-005",
+      "expected_delivery_date": "2026-01-24",
+      "fulfillment_type": "drop_ship",
+      "id": "SO-1005",
+      "incoterm": "DAP",
+      "line_items": [
+        {
+          "product_id": "PROD-005",
+          "quantity": 110,
+          "unit_price": 24.0
+        }
+      ],
+      "notes": "Synthetic drop_ship order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-09",
+      "risk_flags": [],
+      "status": "draft",
+      "subtotal": 2640.0
+    },
+    {
+      "customer_id": "CUST-006",
+      "expected_delivery_date": "2026-01-21",
+      "fulfillment_type": "procurement",
+      "id": "SO-1006",
+      "incoterm": "CFR",
+      "line_items": [
+        {
+          "product_id": "PROD-006",
+          "quantity": 200,
+          "unit_price": 16.0
+        }
+      ],
+      "notes": "Synthetic procurement order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-10",
+      "risk_flags": [],
+      "status": "delayed",
+      "subtotal": 3200.0
+    },
+    {
+      "customer_id": "CUST-007",
+      "expected_delivery_date": "2026-01-20",
+      "fulfillment_type": "warehouse_stock",
+      "id": "SO-1007",
+      "incoterm": "DAP",
+      "line_items": [
+        {
+          "product_id": "PROD-007",
+          "quantity": 18,
+          "unit_price": 132.0
+        }
+      ],
+      "notes": "Synthetic warehouse_stock order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-11",
+      "risk_flags": [],
+      "status": "delivered",
+      "subtotal": 2376.0
+    },
+    {
+      "customer_id": "CUST-008",
+      "expected_delivery_date": "2026-01-19",
+      "fulfillment_type": "procurement",
+      "id": "SO-1008",
+      "incoterm": "FOB",
+      "line_items": [
+        {
+          "product_id": "PROD-008",
+          "quantity": 260,
+          "unit_price": 19.0
+        }
+      ],
+      "notes": "Synthetic procurement order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-12",
+      "risk_flags": [],
+      "status": "confirmed",
+      "subtotal": 4940.0
+    },
+    {
+      "customer_id": "CUST-009",
+      "expected_delivery_date": "2026-01-25",
+      "fulfillment_type": "drop_ship",
+      "id": "SO-1009",
+      "incoterm": "DAP",
+      "line_items": [
+        {
+          "product_id": "PROD-009",
+          "quantity": 70,
+          "unit_price": 68.0
+        }
+      ],
+      "notes": "Synthetic drop_ship order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-13",
+      "risk_flags": [],
+      "status": "in_transit",
+      "subtotal": 4760.0
+    },
+    {
+      "customer_id": "CUST-010",
+      "expected_delivery_date": "2026-01-17",
+      "fulfillment_type": "warehouse_stock",
+      "id": "SO-1010",
+      "incoterm": "CFR",
+      "line_items": [
+        {
+          "product_id": "PROD-010",
+          "quantity": 45,
+          "unit_price": 48.0
+        }
+      ],
+      "notes": "Synthetic warehouse_stock order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-14",
+      "risk_flags": [],
+      "status": "delivered",
+      "subtotal": 2160.0
+    },
+    {
+      "customer_id": "CUST-011",
+      "expected_delivery_date": "2026-01-26",
+      "fulfillment_type": "procurement",
+      "id": "SO-1011",
+      "incoterm": "CIF",
+      "line_items": [
+        {
+          "product_id": "PROD-011",
+          "quantity": 95,
+          "unit_price": 44.0
+        }
+      ],
+      "notes": "Synthetic procurement order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-15",
+      "risk_flags": [],
+      "status": "confirmed",
+      "subtotal": 4180.0
+    },
+    {
+      "customer_id": "CUST-012",
+      "expected_delivery_date": "2026-01-18",
+      "fulfillment_type": "warehouse_stock",
+      "id": "SO-1012",
+      "incoterm": "FOB",
+      "line_items": [
+        {
+          "product_id": "PROD-012",
+          "quantity": 60,
+          "unit_price": 29.0
+        }
+      ],
+      "notes": "Synthetic warehouse_stock order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-16",
+      "risk_flags": [],
+      "status": "confirmed",
+      "subtotal": 1740.0
+    },
+    {
+      "customer_id": "CUST-002",
+      "expected_delivery_date": "2026-01-22",
+      "fulfillment_type": "drop_ship",
+      "id": "SO-1013",
+      "incoterm": "DAP",
+      "line_items": [
+        {
+          "product_id": "PROD-013",
+          "quantity": 20,
+          "unit_price": 58.0
+        }
+      ],
+      "notes": "Synthetic drop_ship order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-17",
+      "risk_flags": [],
+      "status": "in_transit",
+      "subtotal": 1160.0
+    },
+    {
+      "customer_id": "CUST-004",
+      "expected_delivery_date": "2026-01-21",
+      "fulfillment_type": "warehouse_stock",
+      "id": "SO-1014",
+      "incoterm": "CFR",
+      "line_items": [
+        {
+          "product_id": "PROD-014",
+          "quantity": 75,
+          "unit_price": 33.0
+        }
+      ],
+      "notes": "Synthetic warehouse_stock order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-18",
+      "risk_flags": [],
+      "status": "delivered",
+      "subtotal": 2475.0
+    },
+    {
+      "customer_id": "CUST-006",
+      "expected_delivery_date": "2026-01-23",
+      "fulfillment_type": "procurement",
+      "id": "SO-1015",
+      "incoterm": "CIF",
+      "line_items": [
+        {
+          "product_id": "PROD-015",
+          "quantity": 120,
+          "unit_price": 25.0
+        }
+      ],
+      "notes": "Synthetic procurement order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-19",
+      "risk_flags": [],
+      "status": "confirmed",
+      "subtotal": 3000.0
+    },
+    {
+      "customer_id": "CUST-007",
+      "expected_delivery_date": "2026-01-17",
+      "fulfillment_type": "warehouse_stock",
+      "id": "SO-1016",
+      "incoterm": "FOB",
+      "line_items": [
+        {
+          "product_id": "PROD-016",
+          "quantity": 90,
+          "unit_price": 39.0
+        }
+      ],
+      "notes": "Synthetic warehouse_stock order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-20",
+      "risk_flags": [],
+      "status": "confirmed",
+      "subtotal": 3510.0
+    },
+    {
+      "customer_id": "CUST-009",
+      "expected_delivery_date": "2026-01-27",
+      "fulfillment_type": "drop_ship",
+      "id": "SO-1017",
+      "incoterm": "DAP",
+      "line_items": [
+        {
+          "product_id": "PROD-017",
+          "quantity": 160,
+          "unit_price": 19.0
+        }
+      ],
+      "notes": "Synthetic drop_ship order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-21",
+      "risk_flags": [],
+      "status": "in_transit",
+      "subtotal": 3040.0
+    },
+    {
+      "customer_id": "CUST-010",
+      "expected_delivery_date": "2026-01-20",
+      "fulfillment_type": "procurement",
+      "id": "SO-1018",
+      "incoterm": "CFR",
+      "line_items": [
+        {
+          "product_id": "PROD-018",
+          "quantity": 55,
+          "unit_price": 54.0
+        }
+      ],
+      "notes": "Synthetic procurement order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-22",
+      "risk_flags": [],
+      "status": "confirmed",
+      "subtotal": 2970.0
+    },
+    {
+      "customer_id": "CUST-001",
+      "expected_delivery_date": "2026-01-15",
+      "fulfillment_type": "warehouse_stock",
+      "id": "SO-1019",
+      "incoterm": "DAP",
+      "line_items": [
+        {
+          "product_id": "PROD-019",
+          "quantity": 44,
+          "unit_price": 49.0
+        }
+      ],
+      "notes": "Synthetic warehouse_stock order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-23",
+      "risk_flags": [],
+      "status": "delivered",
+      "subtotal": 2156.0
+    },
+    {
+      "customer_id": "CUST-012",
+      "expected_delivery_date": "2026-01-29",
+      "fulfillment_type": "procurement",
+      "id": "SO-1020",
+      "incoterm": "CIF",
+      "line_items": [
+        {
+          "product_id": "PROD-020",
+          "quantity": 130,
+          "unit_price": 41.0
+        }
+      ],
+      "notes": "Synthetic procurement order for deterministic Sprint 2 tooling.",
+      "order_date": "2026-01-24",
+      "risk_flags": [],
+      "status": "confirmed",
+      "subtotal": 5330.0
+    }
+  ],
+  "suppliers": [
+    {
+      "contact_person": {
+        "designation": "Export Sales Lead",
+        "email": "supplier1@example-tradeflow.test",
+        "name": "Supplier Contact 1",
+        "phone": "+99-55-0001-3300"
+      },
+      "country": "China",
+      "id": "SUP-001",
+      "name": "Ningbo Atlas Manufacturing",
+      "phone_number": "+99-55-0001-2200"
+    },
+    {
+      "contact_person": {
+        "designation": "Export Sales Lead",
+        "email": "supplier2@example-tradeflow.test",
+        "name": "Supplier Contact 2",
+        "phone": "+99-55-0002-3300"
+      },
+      "country": "Vietnam",
+      "id": "SUP-002",
+      "name": "Ho Chi Minh Allied Goods",
+      "phone_number": "+99-55-0002-2200"
+    },
+    {
+      "contact_person": {
+        "designation": "Export Sales Lead",
+        "email": "supplier3@example-tradeflow.test",
+        "name": "Supplier Contact 3",
+        "phone": "+99-55-0003-3300"
+      },
+      "country": "Turkey",
+      "id": "SUP-003",
+      "name": "Izmir Packaging Works",
+      "phone_number": "+99-55-0003-2200"
+    },
+    {
+      "contact_person": {
+        "designation": "Export Sales Lead",
+        "email": "supplier4@example-tradeflow.test",
+        "name": "Supplier Contact 4",
+        "phone": "+99-55-0004-3300"
+      },
+      "country": "Indonesia",
+      "id": "SUP-004",
+      "name": "Jakarta Prime Components",
+      "phone_number": "+99-55-0004-2200"
+    },
+    {
+      "contact_person": {
+        "designation": "Export Sales Lead",
+        "email": "supplier5@example-tradeflow.test",
+        "name": "Supplier Contact 5",
+        "phone": "+99-55-0005-3300"
+      },
+      "country": "Bangladesh",
+      "id": "SUP-005",
+      "name": "Chittagong Textile Source",
+      "phone_number": "+99-55-0005-2200"
+    },
+    {
+      "contact_person": {
+        "designation": "Export Sales Lead",
+        "email": "supplier6@example-tradeflow.test",
+        "name": "Supplier Contact 6",
+        "phone": "+99-55-0006-3300"
+      },
+      "country": "Malaysia",
+      "id": "SUP-006",
+      "name": "Penang Industrial Supply",
+      "phone_number": "+99-55-0006-2200"
+    },
+    {
+      "contact_person": {
+        "designation": "Export Sales Lead",
+        "email": "supplier7@example-tradeflow.test",
+        "name": "Supplier Contact 7",
+        "phone": "+99-55-0007-3300"
+      },
+      "country": "UAE",
+      "id": "SUP-007",
+      "name": "Dubai General Trading",
+      "phone_number": "+99-55-0007-2200"
+    },
+    {
+      "contact_person": {
+        "designation": "Export Sales Lead",
+        "email": "supplier8@example-tradeflow.test",
+        "name": "Supplier Contact 8",
+        "phone": "+99-55-0008-3300"
+      },
+      "country": "India",
+      "id": "SUP-008",
+      "name": "Mumbai Metro Exports",
+      "phone_number": "+99-55-0008-2200"
+    }
+  ]
+}

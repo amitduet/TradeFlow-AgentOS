@@ -1,0 +1,41 @@
+[
+  {
+    "case_id": "golden_stock_fulfillment",
+    "question": "Can we fulfill 25 Demo Widget A units for Demo Retail Alpha this week?",
+    "expected_workflow": "order_feasibility",
+    "expected_agents": ["sales", "crm", "inventory", "finance"],
+    "expected_finance_status": "approved",
+    "requires_procurement": false
+  },
+  {
+    "case_id": "golden_procurement_required",
+    "question": "Demo Distributor Beta wants 80 Demo Motor B units. Do we need procurement?",
+    "expected_workflow": "order_feasibility",
+    "expected_agents": ["sales", "crm", "inventory", "finance", "purchase"],
+    "expected_finance_status": "approved_with_conditions",
+    "requires_procurement": true
+  },
+  {
+    "case_id": "golden_credit_rejection",
+    "question": "Can Demo Buyer Gamma place a large order despite open exposure?",
+    "expected_workflow": "order_feasibility",
+    "expected_agents": ["sales", "crm", "inventory", "finance"],
+    "expected_finance_status": "rejected",
+    "requires_procurement": false
+  },
+  {
+    "case_id": "golden_goods_receipt",
+    "question": "Inbound goods for the Demo Motor B procurement arrived. Who should be notified?",
+    "expected_workflow": "order_lifecycle",
+    "expected_agents": ["logistics", "purchase", "inventory", "sales"],
+    "expected_event": "goods_received"
+  },
+  {
+    "case_id": "golden_invoice_follow_up",
+    "question": "Delivery was confirmed for Demo Retail Alpha. What happens next?",
+    "expected_workflow": "order_lifecycle",
+    "expected_agents": ["logistics", "sales", "finance"],
+    "expected_event": "delivery_confirmed",
+    "expected_outputs": ["invoice_draft", "customer_email_draft", "receivable_follow_up"]
+  }
+]

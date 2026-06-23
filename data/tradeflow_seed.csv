@@ -1,0 +1,13 @@
+record_type,record_id,name,related_id,quantity,amount,status
+customer,cust_demo_001,Demo Retail Alpha,,0,50000,active
+customer,cust_demo_002,Demo Distributor Beta,,0,75000,active
+customer,cust_demo_003,Demo Buyer Gamma,,0,10000,watchlist
+product,prod_demo_001,Demo Widget A,,0,120,active
+product,prod_demo_002,Demo Motor B,,0,450,active
+product,prod_demo_003,Demo Sensor C,,0,75,active
+inventory,inv_demo_001,Main Warehouse,prod_demo_001,100,0,available
+inventory,inv_demo_002,Main Warehouse,prod_demo_002,30,0,short_stock
+inventory,inv_demo_003,Overflow Warehouse,prod_demo_003,200,0,available
+supplier,supp_demo_001,Demo Supplier One,,0,0,approved
+supplier,supp_demo_002,Demo Supplier Two,,0,0,approved
+supplier,supp_demo_003,Demo Supplier Three,,0,0,review_required
