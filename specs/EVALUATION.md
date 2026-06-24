@@ -20,6 +20,8 @@ Sprint 11 adds deterministic security policy evals. These checks cover prompt in
 
 Sprint 12 adds deterministic approval workflow evals. These checks verify that Sprint 11 policy decisions are enforced in workflow outcomes, unsafe actions are blocked, review-worthy actions create pending approval requests, and audit events are emitted without external services.
 
+Sprint 13 adds capstone readiness evaluation and AgentOps evidence artifacts. The capstone readiness gate validates committed capstone docs, writeup length, demo timing blocks, public repo checklist, media plan, README references, ignored generated artifacts, and absence of obvious secrets or local absolute paths. The AgentOps evidence index and static dashboard summarize local quality, security, approval, release, and history evidence for capstone review.
+
 ## Why Synthetic Data
 
 The capstone must demonstrate realistic trading-company workflows without storing customer data, supplier terms, production orders, private receivables, or external system credentials. The canonical dataset in `data/synthetic/tradeflow_seed.json` is generated from a fixed seed and contains only fabricated records.
@@ -255,6 +257,7 @@ It runs the required local verification set:
 - `python scripts/run_skill_evals.py`
 - `python scripts/run_security_evals.py --quiet`
 - `python scripts/run_approval_workflow_evals.py --quiet`
+- `python scripts/check_capstone_readiness.py --quiet`
 - `python scripts/run_llm_provider_smoke.py`
 
 The default behavior continues after failures so the final report captures every gate outcome. Use `--stop-on-failure` to stop at the first failed gate.
@@ -333,6 +336,7 @@ Generated artifacts stay ignored by Git:
 ```text
 artifacts/quality_gate/
 artifacts/release_evidence/
+artifacts/capstone/
 artifacts/security_evals/
 artifacts/approval_workflow_evals/
 artifacts/audit_trail/
@@ -394,3 +398,24 @@ python scripts/run_approval_workflow_evals.py --json-out artifacts/approval_work
 Approval workflow evals are included in the unified quality gate because they are deterministic, offline-safe, and secrets-safe. Reports are written under `artifacts/approval_workflow_evals/`, which is ignored by Git.
 
 The Sprint 12 workflow is an enforcement harness, not a production approval database. Approval requests and audit events are in-memory structures suitable for unit tests and local evidence generation. Runtime audit files, if later generated, must stay under ignored `artifacts/audit_trail/`.
+
+## Sprint 13 Capstone Readiness and AgentOps Evidence
+
+The capstone readiness checker is deterministic and offline-safe:
+
+```bash
+python scripts/check_capstone_readiness.py
+```
+
+It verifies that required docs exist under `docs/capstone/`, the Kaggle writeup draft is under 2,500 words, the demo script includes timing blocks, README mentions capstone and evaluation context, generated capstone artifacts are ignored, and committed capstone docs do not contain obvious secrets or local absolute paths.
+
+AgentOps evidence artifacts are generated locally:
+
+```bash
+python scripts/build_agentops_evidence_index.py
+python scripts/build_agentops_dashboard.py
+```
+
+The evidence index scans generated artifact folders for the latest quality gate result, security eval result, guardrail or approval workflow eval result, release evidence pack, and optional quality history summary. Missing optional evidence produces warnings rather than failures. The static dashboard reads that JSON and writes dependency-free HTML under `artifacts/capstone/`.
+
+This fits with Sprint 10 quality history and release evidence by adding a reviewer-facing index over the same ignored artifact ecosystem. The release evidence pack now includes capstone evidence paths when the AgentOps index or dashboard has already been generated.

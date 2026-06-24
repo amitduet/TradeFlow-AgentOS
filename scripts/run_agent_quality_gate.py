@@ -88,6 +88,7 @@ def build_gate_commands(*, require_live_provider: bool = False) -> list[GateComm
         GateCommand("skill_evals", [sys.executable, "scripts/run_skill_evals.py"]),
         GateCommand("security_evals", [sys.executable, "scripts/run_security_evals.py", "--quiet"]),
         GateCommand("approval_workflow_evals", [sys.executable, "scripts/run_approval_workflow_evals.py", "--quiet"]),
+        GateCommand("capstone_readiness", [sys.executable, "scripts/check_capstone_readiness.py", "--quiet"]),
         GateCommand(
             "llm_provider_smoke",
             smoke_command,

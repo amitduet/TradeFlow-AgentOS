@@ -21,6 +21,7 @@ from scripts.summarize_quality_history import build_trend_summary, render_markdo
 DEFAULT_QUALITY_REPORT = REPO_ROOT / "artifacts" / "quality_gate" / "latest.json"
 DEFAULT_HISTORY_DIR = REPO_ROOT / "artifacts" / "quality_gate" / "history"
 DEFAULT_OUT_DIR = REPO_ROOT / "artifacts" / "release_evidence" / "latest"
+DEFAULT_CAPSTONE_DIR = REPO_ROOT / "artifacts" / "capstone"
 
 
 def build_release_evidence_pack(
@@ -32,6 +33,7 @@ def build_release_evidence_pack(
 ) -> dict[str, Any]:
     report = _load_json(quality_report)
     trend = build_trend_summary(history_dir)
+    capstone = _capstone_evidence(DEFAULT_CAPSTONE_DIR, report, trend)
     generated_at = datetime.now(UTC).isoformat()
     release = release_name or f"TradeFlow AgentOS {report.get('git_commit', 'unknown')[:7]}"
     inventory = {
@@ -61,10 +63,13 @@ def build_release_evidence_pack(
                 "provider_smoke_skip_explanation": _provider_skip_explanation(report),
             },
             "trend_summary": trend,
+            "capstone": capstone,
             "reproduce_commands": [
                 "python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/latest.json",
                 "python scripts/summarize_quality_history.py --markdown-out artifacts/quality_gate/trend.md",
                 "python scripts/build_release_evidence_pack.py --quality-report artifacts/quality_gate/latest.json",
+                "python scripts/build_agentops_evidence_index.py",
+                "python scripts/build_agentops_dashboard.py",
             ],
             "artifact_inventory": inventory,
             "known_limitations": [
@@ -134,6 +139,21 @@ def render_evidence_markdown(evidence: dict[str, Any]) -> str:
             "",
             quality.get("approval_workflow_eval_explanation")
             or "Approval workflow evals were not present in the latest quality report.",
+            "",
+            "## Capstone Evidence",
+            "",
+        ]
+    )
+    capstone = evidence.get("capstone", {})
+    lines.extend(
+        [
+            f"AgentOps evidence index: `{capstone.get('agentops_evidence_index') or 'not generated'}`",
+            f"AgentOps dashboard: `{capstone.get('agentops_dashboard') or 'not generated'}`",
+            f"Capstone readiness: {capstone.get('capstone_readiness_status') or 'not found'}",
+            f"Latest quality gate status: {capstone.get('latest_quality_gate_status') or 'not found'}",
+            f"Latest security eval: `{capstone.get('latest_security_eval') or 'not found'}`",
+            f"Latest guardrail/approval eval: `{capstone.get('latest_guardrail_or_approval_eval') or 'not found'}`",
+            f"Quality history summary: `{capstone.get('quality_history_summary') or 'not found'}`",
             "",
             "## Reproduce Locally",
             "",
@@ -217,6 +237,58 @@ def _approval_workflow_eval_explanation(report: dict[str, Any]) -> str | None:
                 f"status {gate['status']!r}: {gate['summary'] or 'no summary'}"
             )
     return None
+
+
+def _capstone_evidence(capstone_dir: Path, report: dict[str, Any], trend: dict[str, Any]) -> dict[str, Any]:
+    index_path = capstone_dir / "agentops_evidence_index.json"
+    dashboard_path = capstone_dir / "agentops_dashboard.html"
+    readiness_status = None
+    for gate in _normalized_gates(report):
+        if gate["name"] == "capstone_readiness":
+            readiness_status = gate["status"]
+            break
+
+    return {
+        "agentops_evidence_index": _repo_path(index_path) if index_path.exists() else None,
+        "agentops_dashboard": _repo_path(dashboard_path) if dashboard_path.exists() else None,
+        "capstone_readiness_status": readiness_status,
+        "latest_quality_gate_status": report.get("overall_status") or report.get("status"),
+        "latest_security_eval": _latest_artifact(
+            REPO_ROOT / "artifacts" / "security_evals",
+            ("latest.json", "security_eval_*.json", "*.json"),
+        ),
+        "latest_guardrail_or_approval_eval": _latest_artifact(
+            REPO_ROOT / "artifacts" / "guardrail_enforcement",
+            ("latest.json", "guardrail*.json", "*.json"),
+        )
+        or _latest_artifact(
+            REPO_ROOT / "artifacts" / "approval_workflow_evals",
+            ("latest.json", "approval_workflow_eval_*.json", "*.json"),
+        ),
+        "quality_history_summary": _repo_path(REPO_ROOT / "artifacts" / "quality_gate" / "trend.md")
+        if (REPO_ROOT / "artifacts" / "quality_gate" / "trend.md").exists()
+        else ("inline trend summary" if trend else None),
+    }
+
+
+def _latest_artifact(directory: Path, patterns: Sequence[str]) -> str | None:
+    if not directory.exists():
+        return None
+    candidates: dict[Path, None] = {}
+    for pattern in patterns:
+        for path in directory.glob(pattern):
+            if path.is_file():
+                candidates[path] = None
+    if not candidates:
+        return None
+    return _repo_path(sorted(candidates, key=lambda path: path.name)[-1])
+
+
+def _repo_path(path: Path) -> str:
+    try:
+        return path.resolve().relative_to(REPO_ROOT).as_posix()
+    except ValueError:
+        return path.name
 
 
 def _next_action(report: dict[str, Any]) -> str:

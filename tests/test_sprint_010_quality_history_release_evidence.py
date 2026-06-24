@@ -231,6 +231,7 @@ def test_deterministic_ordering_of_default_gates() -> None:
         "skill_evals",
         "security_evals",
         "approval_workflow_evals",
+        "capstone_readiness",
         "llm_provider_smoke",
     ]
 

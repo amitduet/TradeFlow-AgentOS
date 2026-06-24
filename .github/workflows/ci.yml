@@ -25,11 +25,19 @@ jobs:
       - name: Run tests
         run: python -m pytest -q
 
+      - name: Run capstone readiness check
+        run: python scripts/check_capstone_readiness.py --quiet
+
       - name: Run unified agent quality gate
         run: python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/latest.json
 
       - name: Build release evidence pack
         run: python scripts/build_release_evidence_pack.py --quality-report artifacts/quality_gate/latest.json --quiet
+
+      - name: Build AgentOps capstone artifacts
+        run: |
+          python scripts/build_agentops_evidence_index.py --quiet
+          python scripts/build_agentops_dashboard.py --quiet
 
       - name: Upload quality gate artifacts
         uses: actions/upload-artifact@v4
