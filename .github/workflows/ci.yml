@@ -26,7 +26,26 @@ jobs:
         run: python -m pytest -q
 
       - name: Run unified agent quality gate
-        run: python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/ci.json
+        run: python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/latest.json
+
+      - name: Build release evidence pack
+        run: python scripts/build_release_evidence_pack.py --quality-report artifacts/quality_gate/latest.json --quiet
+
+      - name: Upload quality gate artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quality-gate-artifacts
+          path: artifacts/quality_gate/
+          if-no-files-found: ignore
+
+      - name: Upload release evidence artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: release-evidence-pack
+          path: artifacts/release_evidence/
+          if-no-files-found: error
 
       # To enable live provider smoke later, add TRADEFLOW_LLM_PROVIDER,
       # TRADEFLOW_LLM_MODEL, and TRADEFLOW_LLM_API_KEY as repository secrets,

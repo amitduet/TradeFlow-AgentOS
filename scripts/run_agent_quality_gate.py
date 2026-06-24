@@ -10,6 +10,7 @@ import argparse
 from dataclasses import dataclass
 from datetime import UTC, datetime
 import json
+import platform
 from pathlib import Path
 import subprocess
 import sys
@@ -25,6 +26,7 @@ from app.agents.redaction import redact_data, redact_text
 
 
 DEFAULT_REPORT_DIR = REPO_ROOT / "artifacts" / "quality_gate"
+DEFAULT_HISTORY_DIR = DEFAULT_REPORT_DIR / "history"
 CommandStatus = str
 
 
@@ -36,10 +38,43 @@ class GateCommand:
     skipped_stdout_markers: tuple[str, ...] = ()
 
 
+def git_metadata() -> dict[str, Any]:
+    def run_git(args: list[str]) -> str | None:
+        completed = subprocess.run(
+            ["git", *args],
+            cwd=REPO_ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if completed.returncode != 0:
+            return None
+        return completed.stdout.strip() or None
+
+    status = run_git(["status", "--porcelain"])
+    return {
+        "git_commit": run_git(["rev-parse", "HEAD"]) or "unknown",
+        "git_branch": run_git(["rev-parse", "--abbrev-ref", "HEAD"]) or "unknown",
+        "git_dirty": bool(status),
+    }
+
+
 def default_report_path(now: datetime | None = None) -> Path:
     generated_at = now or datetime.now(UTC)
     stamp = generated_at.strftime("%Y%m%dT%H%M%SZ")
     return DEFAULT_REPORT_DIR / f"quality_gate_{stamp}.json"
+
+
+def history_report_path(
+    *,
+    history_dir: Path = DEFAULT_HISTORY_DIR,
+    timestamp_utc: datetime | None = None,
+    git_commit: str = "unknown",
+) -> Path:
+    generated_at = timestamp_utc or datetime.now(UTC)
+    stamp = generated_at.strftime("%Y%m%dT%H%M%SZ")
+    short_sha = git_commit[:7] if git_commit and git_commit != "unknown" else "unknown"
+    return history_dir / f"quality_gate_{stamp}_{short_sha}.json"
 
 
 def build_gate_commands(*, require_live_provider: bool = False) -> list[GateCommand]:
@@ -62,6 +97,9 @@ def build_gate_commands(*, require_live_provider: bool = False) -> list[GateComm
 def run_quality_gate(
     *,
     json_out: Path | None = None,
+    history_dir: Path = DEFAULT_HISTORY_DIR,
+    write_history: bool = True,
+    max_history: int | None = None,
     require_live_provider: bool = False,
     quiet: bool = False,
     stop_on_failure: bool = False,
@@ -86,7 +124,13 @@ def run_quality_gate(
             break
 
     finished = datetime.now(UTC)
-    report_path = json_out or default_report_path(finished)
+    git_info = git_metadata()
+    history_path = (
+        history_report_path(history_dir=history_dir, timestamp_utc=finished, git_commit=git_info["git_commit"])
+        if write_history
+        else None
+    )
+    report_path = json_out or history_path or default_report_path(finished)
     report = build_report(
         started_at=started,
         finished_at=finished,
@@ -95,8 +139,14 @@ def run_quality_gate(
         require_live_provider=require_live_provider,
         stop_on_failure=stop_on_failure,
         report_path=report_path,
+        git_info=git_info,
+        history_path=history_path,
     )
-    write_report(report, report_path)
+    if json_out:
+        write_report(report, json_out)
+    if history_path:
+        write_report(report, history_path)
+        prune_history(history_dir, max_history)
 
     if not quiet:
         print_summary(report)
@@ -140,12 +190,14 @@ def run_gate_command(gate_command: GateCommand, *, require_live_provider: bool =
             "required": gate_command.required,
             "status": status,
             "returncode": completed.returncode,
+            "exit_code": completed.returncode,
             "started_at": started.isoformat(),
             "duration_seconds": round(duration_seconds, 3),
             "stdout": stdout,
             "stderr": stderr,
             "skip_reason": skip_reason,
             "failure_summary": failure_summary,
+            "summary": skip_reason or failure_summary or ("Command passed." if status == "passed" else "Command skipped."),
         }
     )
 
@@ -159,6 +211,8 @@ def build_report(
     require_live_provider: bool,
     stop_on_failure: bool,
     report_path: Path | None = None,
+    git_info: dict[str, Any] | None = None,
+    history_path: Path | None = None,
 ) -> dict[str, Any]:
     counts = {
         "passed": sum(1 for result in command_results if result["status"] == "passed"),
@@ -180,24 +234,48 @@ def build_report(
         f"{counts['passed']} passed, {counts['failed']} failed, "
         f"{counts['skipped']} skipped out of {counts['total']} gates"
     )
+    git_info = git_info or {
+        "git_commit": "unknown",
+        "git_branch": "unknown",
+        "git_dirty": False,
+    }
+    run_id_commit = git_info["git_commit"][:12] if git_info["git_commit"] != "unknown" else "unknown"
+    run_id = f"{finished_at.strftime('%Y%m%dT%H%M%SZ')}-{run_id_commit}"
 
     return redact_data(
         {
-            "schema_version": "1.0",
+            "schema_version": "2.0",
+            "run_id": run_id,
+            "timestamp_utc": finished_at.isoformat(),
             "generated_at": finished_at.isoformat(),
             "started_at": started_at.isoformat(),
+            "started_at_utc": started_at.isoformat(),
             "finished_at": finished_at.isoformat(),
+            "finished_at_utc": finished_at.isoformat(),
             "duration_seconds": round(duration_seconds, 3),
             "status": status,
+            "overall_status": status,
             "summary": summary,
             "counts": counts,
+            "git_commit": git_info["git_commit"],
+            "git_branch": git_info["git_branch"],
+            "git_dirty": git_info["git_dirty"],
+            "python_version": platform.python_version(),
+            "platform": f"{platform.system()} {platform.release()} {platform.machine()}".strip(),
             "options": {
                 "require_live_provider": require_live_provider,
                 "stop_on_failure": stop_on_failure,
             },
             "commands": command_results,
+            "gates": command_results,
+            "results": command_results,
             "failures": failures,
             "report_path": str(report_path) if report_path else None,
+            "history_path": str(history_path) if history_path else None,
+            "redaction": {
+                "status": "redacted",
+                "note": "Report fields are passed through app.agents.redaction before writing.",
+            },
         }
     )
 
@@ -206,6 +284,14 @@ def write_report(report: dict[str, Any], path: Path) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(redact_data(report), indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return path
+
+
+def prune_history(history_dir: Path, max_history: int | None) -> None:
+    if max_history is None or max_history < 1 or not history_dir.exists():
+        return
+    reports = sorted(history_dir.glob("quality_gate_*.json"), key=lambda path: path.name)
+    for stale_report in reports[:-max_history]:
+        stale_report.unlink(missing_ok=True)
 
 
 def print_summary(report: dict[str, Any]) -> None:
@@ -221,6 +307,14 @@ def print_summary(report: dict[str, Any]) -> None:
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--json-out", type=Path, default=None, help="Write the JSON report to this path.")
+    parser.add_argument(
+        "--history-dir",
+        type=Path,
+        default=DEFAULT_HISTORY_DIR,
+        help="Directory for timestamped quality gate history reports.",
+    )
+    parser.add_argument("--no-history", action="store_true", help="Do not write a timestamped history report.")
+    parser.add_argument("--max-history", type=int, default=None, help="Keep only the newest N history reports.")
     parser.add_argument(
         "--require-live-provider",
         action="store_true",
@@ -239,6 +333,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     exit_code, _report = run_quality_gate(
         json_out=args.json_out,
+        history_dir=args.history_dir,
+        write_history=not args.no_history,
+        max_history=args.max_history,
         require_live_provider=args.require_live_provider,
         quiet=args.quiet,
         stop_on_failure=args.stop_on_failure,
