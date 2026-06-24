@@ -4,7 +4,7 @@ TradeFlow AgentOS is a Kaggle AI Agents capstone project for the Agents for Busi
 
 This Sprint 1 foundation is intentionally minimal. It does not connect to Odoo, production systems, real customer data, real transaction APIs, or real LLM calls. Every business action is synthetic, read-only, or draft-only, with human approval required before any purchase order, invoice, stock update, or customer message could become real.
 
-Sprint 2 adds a deterministic synthetic dataset and read-only tool layer under the same safety model. Sprint 3 adds the first agent-facing workflow orchestrator and approval gate on top of those tools. Sprint 4 adds a constrained planner facade that can interpret supported order-risk requests, select only an approved workflow, execute deterministic tools through the existing orchestrator, and produce cited, tool-grounded responses. Sprint 5 adds planner golden evals, structured traces, version metadata, and audit records for planner decisions. Sprint 6 adds business-readable domain runbooks, reusable skill files, a skill catalog, deterministic skill trigger evals, and loader helpers. It still does not require a live external LLM.
+Sprint 2 adds a deterministic synthetic dataset and read-only tool layer under the same safety model. Sprint 3 adds the first agent-facing workflow orchestrator and approval gate on top of those tools. Sprint 4 adds a constrained planner facade that can interpret supported order-risk requests, select only an approved workflow, execute deterministic tools through the existing orchestrator, and produce cited, tool-grounded responses. Sprint 5 adds planner golden evals, structured traces, version metadata, and audit records for planner decisions. Sprint 6 adds business-readable domain runbooks, reusable skill files, a skill catalog, deterministic skill trigger evals, and loader helpers. Sprint 7 adds an opt-in real LLM provider behind the planner abstraction, with strict JSON validation and deterministic fallback. Tests and CI still do not require live external LLM credentials.
 
 ## Business Problem
 
@@ -118,6 +118,47 @@ python scripts/list_domain_skills.py
 
 The Sprint 6 trigger dataset covers positive and negative cases for order-risk analysis, purchase-order recommendation, and approval-gate handling. The skill helpers in `app/agents/domain_skills.py` are deterministic metadata and phrase-matching utilities, not a runtime LLM skill engine.
 
+## Sprint 7 Real LLM Provider Integration
+
+Sprint 7 keeps the deterministic planner as the default while adding a real provider adapter in `app/agents/llm_provider.py`. Provider selection is environment-driven:
+
+```bash
+TRADEFLOW_PLANNER_PROVIDER=deterministic  # deterministic|mock|llm
+TRADEFLOW_LLM_PROVIDER=openai             # openai|gemini|custom
+TRADEFLOW_LLM_MODEL=
+TRADEFLOW_LLM_API_KEY=
+TRADEFLOW_LLM_BASE_URL=
+TRADEFLOW_LLM_TIMEOUT_SECONDS=30
+```
+
+Run deterministic planner mode:
+
+```bash
+python scripts/run_planner.py "Analyze sales order SO-1005" --provider deterministic --show-trace
+```
+
+Run real LLM mode only with local credentials:
+
+```bash
+TRADEFLOW_PLANNER_PROVIDER=llm \
+TRADEFLOW_LLM_PROVIDER=openai \
+TRADEFLOW_LLM_MODEL=<model-name> \
+TRADEFLOW_LLM_API_KEY=<local-secret> \
+python scripts/run_planner.py "Analyze sales order SO-1005" --show-trace
+```
+
+The LLM receives the user request, allowed planner routes, allowed recommendation labels, approval constraints, strict output schema, and only the deterministically matched skill plus compact related runbook snippets. It must return strict JSON. Unknown fields, invalid enum values, unsupported routes, approval-bypass terms, tool execution claims, and evidence references outside the prompt context are rejected.
+
+If the LLM fails, times out, returns malformed JSON, or violates planner contracts, the planner falls back to the deterministic provider. `PlannerTrace`, `PlannerRunMetadata`, CLI output, and audit records expose `provider_requested`, `provider_used`, `fallback_used`, `fallback_reason`, `llm_response_valid`, and `llm_validation_errors`.
+
+Manual smoke test with credentials:
+
+```bash
+python scripts/run_llm_provider_smoke.py
+```
+
+The smoke script sends one safe planner request and never executes business actions directly. Approval gates remain authoritative; the LLM can recommend review, escalation, draft preparation, or requiring approval, but cannot approve, execute, bypass, modify credit or supplier terms, execute payment, or update inventory.
+
 ## Demo Scenarios
 
 - Customer order can be fulfilled from available stock.
@@ -149,3 +190,7 @@ Sprint 5 establishes planner regression and observability foundations. It adds a
 ## Sprint 6 Status
 
 Sprint 6 establishes versioned business domain knowledge for future planner grounding. It adds readable runbooks for order risk, purchase order recommendation, approval gates, customer risk, supplier risk, and logistics risk; focused skill files and a skill catalog; deterministic trigger evals; loader helpers; CLI discoverability; documentation; and pytest coverage. Approval gates remain authoritative, no external APIs are added, and no real LLM provider is integrated.
+
+## Sprint 7 Status
+
+Sprint 7 integrates a real LLM provider behind the constrained planner abstraction without changing the default test path. It adds provider selection, an OpenAI-compatible/Gemini/custom HTTP adapter, strict planner-output schema validation, deterministic fallback, provider metadata in traces and audits, CLI provider reporting, mocked provider tests, a manual smoke script, and setup documentation. Known limitations: the live provider path is intentionally minimal, does not stream responses, and only supports planner routing output; workflow execution and all business evidence remain deterministic and approval-gated. A recommended next sprint is to add provider-specific live smoke evals in a secrets-enabled local or staging environment while keeping CI deterministic.

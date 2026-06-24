@@ -8,6 +8,8 @@ Sprint 5 adds constrained-planner evaluation before live LLM integration. Planne
 
 Sprint 6 adds deterministic skill trigger evaluation before live LLM integration. Skill evals verify that business-domain skill files trigger on supported requests, avoid wrong-skill matches on negative requests, and route approval-bypass phrasing to approval-gate handling rather than procurement execution.
 
+Sprint 7 adds mocked real-provider integration tests before any live provider is required in CI. These tests verify strict JSON schema validation, rejection of unsafe provider output, deterministic fallback, provider metadata in trace and audit records, and preservation of planner and skill eval pass rates without LLM credentials.
+
 ## Why Synthetic Data
 
 The capstone must demonstrate realistic trading-company workflows without storing customer data, supplier terms, production orders, private receivables, or external system credentials. The canonical dataset in `data/synthetic/tradeflow_seed.json` is generated from a fixed seed and contains only fabricated records.
@@ -133,3 +135,45 @@ python scripts/run_skill_evals.py
 The runner loads skill metadata from `skills/*/SKILL.md`, evaluates phrase-based trigger behavior through `app/agents/domain_skills.py`, prints per-case pass/fail output, reports trigger accuracy, negative trigger accuracy, and per-skill pass rates, and exits non-zero on failure.
 
 Sprint 6 skills differ from planner code: skills document business trigger boundaries and safety constraints, while planner code still performs deterministic routing and workflow execution. Future real LLM provider evals should require the provider to use these same runbooks, skill trigger boundaries, traces, audit logs, and approval constraints.
+
+## Sprint 7 LLM Provider Integration Evals
+
+Sprint 7 provider tests live in `tests/test_sprint_007_llm_provider_integration.py`. They cover:
+
+- valid mocked LLM JSON mapping into planner contracts
+- malformed JSON fallback
+- missing required fields fallback
+- invalid enum rejection
+- approval-bypass and execution-claim rejection
+- unsupported route and action rejection
+- hallucinated evidence-reference rejection
+- timeout/error fallback
+- provider metadata in `PlannerTrace` and audit JSONL records
+- CLI provider and fallback reporting
+- planner evals and skill evals passing without live credentials
+
+Run the focused provider tests with:
+
+```bash
+python -m pytest tests/test_sprint_007_llm_provider_integration.py -q
+```
+
+Run the full deterministic verification set with:
+
+```bash
+python scripts/run_planner_evals.py
+python scripts/run_skill_evals.py
+python -m pytest -q
+```
+
+Live provider smoke tests are manual only:
+
+```bash
+TRADEFLOW_PLANNER_PROVIDER=llm \
+TRADEFLOW_LLM_PROVIDER=<provider> \
+TRADEFLOW_LLM_MODEL=<model> \
+TRADEFLOW_LLM_API_KEY=<local-secret> \
+python scripts/run_planner.py "Analyze sales order SO-1005" --show-trace
+```
+
+Manual smoke tests must not be required for CI because they depend on local secrets, network availability, and provider behavior outside the deterministic repository contract. They are useful for checking provider configuration and adapter compatibility, not for replacing planner golden evals or skill trigger evals.

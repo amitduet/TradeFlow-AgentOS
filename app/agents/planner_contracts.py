@@ -12,7 +12,7 @@ from app.agents.workflow_contracts import ApprovalRequest, OrderRiskWorkflowResu
 
 
 PlannerMode = Literal["rule_based", "llm_ready"]
-PlannerProviderMode = Literal["mocked", "rule_based", "future_llm"]
+PlannerProviderMode = Literal["mocked", "rule_based", "future_llm", "llm"]
 PlannerSafetyOutcome = Literal["pass", "blocked", "escalated", "refused", "error"]
 EvidenceSourceType = Literal["workflow_output", "deterministic_tool_output", "approval_gate"]
 
@@ -40,6 +40,12 @@ class PlannerRunMetadata(BaseModel):
     provider_name: str
     provider_mode: PlannerProviderMode
     evaluation_dataset_version: str | None = None
+    provider_requested: str = "deterministic"
+    provider_used: str = "deterministic"
+    fallback_used: bool = False
+    fallback_reason: str | None = None
+    llm_response_valid: bool | None = None
+    llm_validation_errors: list[str] = Field(default_factory=list)
 
 
 class EvidenceCitation(BaseModel):
@@ -91,6 +97,12 @@ class PlannerTrace(BaseModel):
     final_response_summary: str
     errors: list[str] = Field(default_factory=list)
     fallback_behavior: str | None = None
+    provider_requested: str = "deterministic"
+    provider_used: str = "deterministic"
+    fallback_used: bool = False
+    fallback_reason: str | None = None
+    llm_response_valid: bool | None = None
+    llm_validation_errors: list[str] = Field(default_factory=list)
 
 
 class PlannerAuditRecord(BaseModel):
@@ -103,6 +115,12 @@ class PlannerAuditRecord(BaseModel):
     reason_codes: list[str] = Field(default_factory=list)
     safety_decision: PlannerSafetyOutcome
     evidence_references: list[str] = Field(default_factory=list)
+    provider_requested: str = "deterministic"
+    provider_used: str = "deterministic"
+    fallback_used: bool = False
+    fallback_reason: str | None = None
+    llm_response_valid: bool | None = None
+    llm_validation_errors: list[str] = Field(default_factory=list)
     created_timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 

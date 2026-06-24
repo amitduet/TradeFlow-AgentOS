@@ -40,6 +40,12 @@ def create_planner_audit_record(
         reason_codes=trace.reason_codes,
         safety_decision=safety_outcome,
         evidence_references=evidence_references,
+        provider_requested=trace.provider_requested,
+        provider_used=trace.provider_used,
+        fallback_used=trace.fallback_used,
+        fallback_reason=trace.fallback_reason,
+        llm_response_valid=trace.llm_response_valid,
+        llm_validation_errors=trace.llm_validation_errors,
     )
 
 
