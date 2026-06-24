@@ -4,7 +4,7 @@ TradeFlow AgentOS is a Kaggle AI Agents capstone project for the Agents for Busi
 
 This Sprint 1 foundation is intentionally minimal. It does not connect to Odoo, production systems, real customer data, real transaction APIs, or real LLM calls. Every business action is synthetic, read-only, or draft-only, with human approval required before any purchase order, invoice, stock update, or customer message could become real.
 
-Sprint 2 adds a deterministic synthetic dataset and read-only tool layer under the same safety model. Sprint 3 adds the first agent-facing workflow orchestrator and approval gate on top of those tools. Sprint 4 adds a constrained planner facade that can interpret supported order-risk requests, select only an approved workflow, execute deterministic tools through the existing orchestrator, and produce cited, tool-grounded responses. Sprint 5 adds planner golden evals, structured traces, version metadata, and audit records for planner decisions. Sprint 6 adds business-readable domain runbooks, reusable skill files, a skill catalog, deterministic skill trigger evals, and loader helpers. Sprint 7 adds an opt-in real LLM provider behind the planner abstraction, with strict JSON validation and deterministic fallback. Sprint 8 adds an opt-in provider smoke-eval harness for local or staging checks. Sprint 9 adds a unified local and CI quality gate for tests, evals, provider-smoke skip tracking, and sanitized JSON reports. Sprint 10 adds timestamped quality gate history, trend summaries, and release evidence packs. Sprint 11 adds deterministic security guardrails and security evals for prompt injection, unsafe tool use, secrets exfiltration, approval bypasses, data leakage, and destructive operations. Tests and CI still do not require live external LLM credentials.
+Sprint 2 adds a deterministic synthetic dataset and read-only tool layer under the same safety model. Sprint 3 adds the first agent-facing workflow orchestrator and approval gate on top of those tools. Sprint 4 adds a constrained planner facade that can interpret supported order-risk requests, select only an approved workflow, execute deterministic tools through the existing orchestrator, and produce cited, tool-grounded responses. Sprint 5 adds planner golden evals, structured traces, version metadata, and audit records for planner decisions. Sprint 6 adds business-readable domain runbooks, reusable skill files, a skill catalog, deterministic skill trigger evals, and loader helpers. Sprint 7 adds an opt-in real LLM provider behind the planner abstraction, with strict JSON validation and deterministic fallback. Sprint 8 adds an opt-in provider smoke-eval harness for local or staging checks. Sprint 9 adds a unified local and CI quality gate for tests, evals, provider-smoke skip tracking, and sanitized JSON reports. Sprint 10 adds timestamped quality gate history, trend summaries, and release evidence packs. Sprint 11 adds deterministic security guardrails and security evals for prompt injection, unsafe tool use, secrets exfiltration, approval bypasses, data leakage, and destructive operations. Sprint 12 enforces those policy decisions in secure workflows with human approval requests, audit events, and deterministic approval workflow evals. Tests and CI still do not require live external LLM credentials.
 
 ## Business Problem
 
@@ -31,13 +31,13 @@ pytest
 
 ## Quality Gate
 
-Sprint 11 provides one local and CI-ready command for the required agent behavior and security checks:
+Sprint 12 provides one local and CI-ready command for the required agent behavior, security checks, and approval workflow enforcement:
 
 ```bash
 .venv/bin/python scripts/run_agent_quality_gate.py
 ```
 
-The quality gate runs the pytest suite, planner evals, skill evals, deterministic security evals, and LLM provider smoke evals. It writes sanitized JSON reports under `artifacts/quality_gate/`, which is ignored by Git. Each normal run also writes timestamped history under `artifacts/quality_gate/history/`. Missing live provider credentials are recorded as a clean provider-smoke skip by default.
+The quality gate runs the pytest suite, planner evals, skill evals, deterministic security evals, approval workflow evals, and LLM provider smoke evals. It writes sanitized JSON reports under `artifacts/quality_gate/`, which is ignored by Git. Each normal run also writes timestamped history under `artifacts/quality_gate/history/`. Missing live provider credentials are recorded as a clean provider-smoke skip by default.
 
 Write a report to a stable path:
 
@@ -77,6 +77,15 @@ Run the deterministic security evals directly:
 ```
 
 Security eval reports are written under `artifacts/security_evals/`, which is ignored by Git. The Sprint 11 policy uses deterministic, explainable rules rather than LLM calls so it can run offline in CI. Advanced LLM-as-judge security evaluation, production policy servers, real DLP integrations, and live red-team automation are intentionally out of scope for this sprint.
+
+Run the deterministic approval workflow evals directly:
+
+```bash
+.venv/bin/python scripts/run_approval_workflow_evals.py
+.venv/bin/python scripts/run_approval_workflow_evals.py --json-out artifacts/approval_workflow_evals/latest.json
+```
+
+Approval workflow eval reports are written under `artifacts/approval_workflow_evals/`, which is ignored by Git. The Sprint 12 workflow uses deterministic policy enforcement, in-memory approval requests, and redacted audit event export rather than live services.
 
 Require live provider smoke only in a configured local or staging environment:
 
@@ -290,8 +299,12 @@ Sprint 8 adds a secrets-aware provider smoke-eval harness without changing deter
 
 ## Sprint 9 Status
 
-Sprint 9 adds a unified quality gate runner and CI workflow. The gate aggregates pytest, planner evals, skill evals, and provider smoke into one pass/fail/skip report under `artifacts/quality_gate/`, redacts secret-like values with the shared redaction helper, treats missing live provider credentials as a clean skip by default, and can fail on skipped live smoke with `--require-live-provider`.
+Sprint 9 adds a unified quality gate runner and CI workflow. The gate aggregates pytest, planner evals, skill evals, security evals, approval workflow evals, and provider smoke into one pass/fail/skip report under `artifacts/quality_gate/`, redacts secret-like values with the shared redaction helper, treats missing live provider credentials as a clean skip by default, and can fail on skipped live smoke with `--require-live-provider`.
 
 ## Sprint 10 Status
 
 Sprint 10 turns the quality gate into an auditable release-quality system. It adds timestamped history reports with git/runtime metadata, trend summaries across previous runs, release evidence JSON and Markdown packs, CI artifact upload, and focused tests for history, trends, redaction, provider-smoke skip semantics, and evidence generation. Generated quality and release artifacts remain ignored under `artifacts/`.
+
+## Sprint 12 Status
+
+Sprint 12 turns deterministic security policy results into workflow enforcement. It adds guardrail enforcement outcomes, in-memory human approval requests, approval decision helpers, redacted audit trail events, secure workflow orchestration, approval workflow evals, and release evidence visibility for the new gate. Unsafe actions are blocked, review-level actions require approval, and generated approval/audit artifacts remain ignored under `artifacts/`.

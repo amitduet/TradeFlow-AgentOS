@@ -57,6 +57,7 @@ def build_release_evidence_pack(
                 "counts": report.get("counts", {}),
                 "summary": report.get("summary"),
                 "gates": _normalized_gates(report),
+                "approval_workflow_eval_explanation": _approval_workflow_eval_explanation(report),
                 "provider_smoke_skip_explanation": _provider_skip_explanation(report),
             },
             "trend_summary": trend,
@@ -129,6 +130,11 @@ def render_evidence_markdown(evidence: dict[str, Any]) -> str:
             "",
             quality.get("provider_smoke_skip_explanation") or "Provider smoke was not skipped in the latest report.",
             "",
+            "## Approval Workflow Evals",
+            "",
+            quality.get("approval_workflow_eval_explanation")
+            or "Approval workflow evals were not present in the latest quality report.",
+            "",
             "## Reproduce Locally",
             "",
         ]
@@ -200,6 +206,16 @@ def _provider_skip_explanation(report: dict[str, Any]) -> str | None:
     for gate in _normalized_gates(report):
         if gate["name"] == "llm_provider_smoke" and gate["status"] == "skipped":
             return gate["summary"] or "Live provider smoke was skipped because it is not configured by default."
+    return None
+
+
+def _approval_workflow_eval_explanation(report: dict[str, Any]) -> str | None:
+    for gate in _normalized_gates(report):
+        if gate["name"] == "approval_workflow_evals":
+            return (
+                "Approval workflow evals were included in the quality gate with "
+                f"status {gate['status']!r}: {gate['summary'] or 'no summary'}"
+            )
     return None
 
 

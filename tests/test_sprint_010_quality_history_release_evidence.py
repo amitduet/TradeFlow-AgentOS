@@ -229,6 +229,8 @@ def test_deterministic_ordering_of_default_gates() -> None:
         "pytest",
         "planner_evals",
         "skill_evals",
+        "security_evals",
+        "approval_workflow_evals",
         "llm_provider_smoke",
     ]
 
