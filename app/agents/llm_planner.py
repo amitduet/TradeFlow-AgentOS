@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import hashlib
+import os
 import re
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
+from app.agents.llm_provider import ConfiguredLLMPlannerProvider, LLMProviderError, PROHIBITED_ACTION_TERMS
 from app.agents.order_risk_orchestrator import analyze_sales_order_risk
 from app.agents.planner_contracts import (
     EvidenceCitation,
@@ -46,6 +49,8 @@ SUPPORTED_REQUEST_TERMS = {
 PLANNER_VERSION = "sprint-005-constrained-planner-v1"
 PROMPT_TEMPLATE_VERSION = "order-risk-planner-prompt-v1"
 PROVIDER_NAME = "tradeflow-rule-planner"
+DETERMINISTIC_PROVIDER_SELECTIONS = {"deterministic", "rule_based", "rule-based"}
+SUPPORTED_PROVIDER_SELECTIONS = {*DETERMINISTIC_PROVIDER_SELECTIONS, "mock", "llm"}
 
 
 class PlannerProvider(Protocol):
@@ -55,22 +60,30 @@ class PlannerProvider(Protocol):
         """Return a constrained planner decision without executing tools."""
 
 
+@dataclass(frozen=True)
+class PlannerProviderExecution:
+    requested: str
+    used: str
+    provider_mode: str
+    provider_name: str
+    fallback_used: bool = False
+    fallback_reason: str | None = None
+    llm_response_valid: bool | None = None
+    llm_validation_errors: list[str] | None = None
+
+
 def plan_and_execute_user_request(
     user_request: str,
     dataset_path: str | None = None,
     use_llm: bool = False,
     *,
     llm_provider: PlannerProvider | None = None,
+    planner_provider_selection: str | None = None,
     approval_storage_path: str | Path | None = None,
     audit_log_path: str | Path | None = None,
     evaluation_dataset_version: str | None = None,
 ) -> PlannerExecutionResult:
     """Plan a business request, execute the allowlisted workflow, and ground the answer."""
-    metadata = _build_metadata(
-        use_llm=use_llm,
-        llm_provider=llm_provider,
-        evaluation_dataset_version=evaluation_dataset_version,
-    )
     planner_input = PlannerInput(
         user_request=user_request,
         dataset_path=dataset_path,
@@ -79,7 +92,15 @@ def plan_and_execute_user_request(
     resolved_dataset_path = str(Path(dataset_path)) if dataset_path is not None else str(DEFAULT_DATASET_PATH)
     dataset_hash_before = _sha256_if_exists(resolved_dataset_path)
 
-    decision = _make_planner_decision(planner_input, llm_provider)
+    decision, provider_execution = _make_planner_decision(
+        planner_input,
+        llm_provider,
+        planner_provider_selection=planner_provider_selection,
+    )
+    metadata = _build_metadata(
+        provider_execution=provider_execution,
+        evaluation_dataset_version=evaluation_dataset_version,
+    )
     workflow_result = None
     tool_call_trace: list[PlannerToolCall] = []
     error: str | None = None
@@ -148,6 +169,12 @@ def plan_and_execute_user_request(
         final_response_summary=grounded_response.summary,
         errors=[] if success else [error or _safety_error(safety_checks) or "Planner execution did not succeed."],
         fallback_behavior=_fallback_behavior(decision, error, safety_outcome),
+        provider_requested=provider_execution.requested,
+        provider_used=provider_execution.used,
+        fallback_used=provider_execution.fallback_used,
+        fallback_reason=provider_execution.fallback_reason,
+        llm_response_valid=provider_execution.llm_response_valid,
+        llm_validation_errors=provider_execution.llm_validation_errors or [],
     )
     audit_record = create_planner_audit_record(
         decision=decision,
@@ -177,34 +204,171 @@ def plan_and_execute_user_request(
 
 def _build_metadata(
     *,
-    use_llm: bool,
-    llm_provider: PlannerProvider | None,
+    provider_execution: PlannerProviderExecution,
     evaluation_dataset_version: str | None,
 ) -> PlannerRunMetadata:
-    provider_mode = "mocked" if use_llm and llm_provider is not None else "rule_based"
-    provider_name = type(llm_provider).__name__ if llm_provider is not None else PROVIDER_NAME
     return PlannerRunMetadata(
         planner_version=PLANNER_VERSION,
         prompt_template_version=PROMPT_TEMPLATE_VERSION,
-        provider_name=provider_name,
-        provider_mode=provider_mode,
+        provider_name=provider_execution.provider_name,
+        provider_mode=provider_execution.provider_mode,  # type: ignore[arg-type]
         evaluation_dataset_version=evaluation_dataset_version,
+        provider_requested=provider_execution.requested,
+        provider_used=provider_execution.used,
+        fallback_used=provider_execution.fallback_used,
+        fallback_reason=provider_execution.fallback_reason,
+        llm_response_valid=provider_execution.llm_response_valid,
+        llm_validation_errors=provider_execution.llm_validation_errors or [],
     )
 
 
 def _make_planner_decision(
     planner_input: PlannerInput,
     llm_provider: PlannerProvider | None,
-) -> PlannerDecision:
-    if planner_input.use_llm and llm_provider is not None:
-        decision = llm_provider.decide(planner_input)
-        return _normalize_provider_decision(decision, planner_input.user_request)
-    return _rule_based_decision(planner_input.user_request)
+    *,
+    planner_provider_selection: str | None,
+) -> tuple[PlannerDecision, PlannerProviderExecution]:
+    requested = _resolve_provider_selection(
+        use_llm=planner_input.use_llm,
+        llm_provider=llm_provider,
+        planner_provider_selection=planner_provider_selection,
+    )
+    if requested not in SUPPORTED_PROVIDER_SELECTIONS:
+        fallback_reason = f"Unsupported planner provider {requested!r}; using deterministic provider."
+        return _fallback_decision(
+            planner_input,
+            requested=requested,
+            fallback_reason=fallback_reason,
+            validation_errors=[fallback_reason],
+        )
+
+    if requested in DETERMINISTIC_PROVIDER_SELECTIONS:
+        return (
+            _rule_based_decision(planner_input.user_request),
+            PlannerProviderExecution(
+                requested="deterministic",
+                used="deterministic",
+                provider_mode="rule_based",
+                provider_name=PROVIDER_NAME,
+            ),
+        )
+
+    provider = llm_provider
+    if requested == "llm" and provider is None:
+        provider = ConfiguredLLMPlannerProvider()
+    if requested == "mock" and provider is None:
+        fallback_reason = "Mock planner provider was requested but no mock provider was supplied."
+        return _fallback_decision(
+            planner_input,
+            requested=requested,
+            fallback_reason=fallback_reason,
+            validation_errors=[fallback_reason],
+        )
+
+    assert provider is not None
+    try:
+        decision = _normalize_provider_decision(provider.decide(planner_input), planner_input.user_request)
+        validation_errors = _provider_decision_errors(decision)
+        if validation_errors:
+            return _fallback_decision(
+                planner_input,
+                requested=requested,
+                fallback_reason="Planner provider decision violated planner constraints.",
+                validation_errors=validation_errors,
+            )
+    except LLMProviderError as exc:
+        return _fallback_decision(
+            planner_input,
+            requested=requested,
+            fallback_reason=str(exc),
+            validation_errors=exc.validation_errors,
+        )
+    except Exception as exc:
+        return _fallback_decision(
+            planner_input,
+            requested=requested,
+            fallback_reason=f"Planner provider failed safely: {exc}",
+            validation_errors=[str(exc)],
+        )
+
+    return (
+        decision,
+        PlannerProviderExecution(
+            requested=requested,
+            used=requested,
+            provider_mode="llm" if requested == "llm" else "mocked",
+            provider_name=type(provider).__name__,
+            llm_response_valid=True if requested == "llm" else None,
+            llm_validation_errors=[],
+        ),
+    )
+
+
+def _resolve_provider_selection(
+    *,
+    use_llm: bool,
+    llm_provider: PlannerProvider | None,
+    planner_provider_selection: str | None,
+) -> str:
+    if planner_provider_selection:
+        return planner_provider_selection.strip().lower()
+    env_selection = os.getenv("TRADEFLOW_PLANNER_PROVIDER", "").strip().lower()
+    if env_selection:
+        return env_selection
+    if use_llm and llm_provider is not None:
+        return "mock"
+    if use_llm:
+        return "llm"
+    return "deterministic"
+
+
+def _fallback_decision(
+    planner_input: PlannerInput,
+    *,
+    requested: str,
+    fallback_reason: str,
+    validation_errors: list[str],
+) -> tuple[PlannerDecision, PlannerProviderExecution]:
+    decision = _rule_based_decision(planner_input.user_request)
+    return (
+        decision.model_copy(
+            update={"reason_codes": list(dict.fromkeys([*decision.reason_codes, "provider_fallback_used"]))}
+        ),
+        PlannerProviderExecution(
+            requested=requested,
+            used="deterministic",
+            provider_mode="rule_based",
+            provider_name=PROVIDER_NAME,
+            fallback_used=True,
+            fallback_reason=fallback_reason,
+            llm_response_valid=False if requested == "llm" else None,
+            llm_validation_errors=validation_errors,
+        ),
+    )
 
 
 def _normalize_provider_decision(decision: PlannerDecision, user_request: str) -> PlannerDecision:
     sales_order_id = decision.extracted_sales_order_id or _extract_sales_order_id(user_request)
     return decision.model_copy(update={"extracted_sales_order_id": sales_order_id})
+
+
+def _provider_decision_errors(decision: PlannerDecision) -> list[str]:
+    errors: list[str] = []
+    if decision.selected_workflow is not None and decision.selected_workflow not in APPROVED_WORKFLOWS:
+        errors.append(f"selected_workflow {decision.selected_workflow!r} is not approved.")
+    lowered_text = "\n".join(
+        [
+            decision.intent,
+            decision.selected_workflow or "",
+            decision.reason,
+            decision.clarification_question or "",
+            *decision.reason_codes,
+        ]
+    ).lower()
+    for term in PROHIBITED_ACTION_TERMS:
+        if term in lowered_text:
+            errors.append(f"prohibited action term {term!r} appeared in provider decision.")
+    return errors
 
 
 def _rule_based_decision(user_request: str) -> PlannerDecision:
