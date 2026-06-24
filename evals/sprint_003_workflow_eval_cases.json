@@ -1,0 +1,99 @@
+[
+  {
+    "case_id": "WF-001",
+    "description": "High-risk low-rated customer order returns escalation recommendation.",
+    "sales_order_id": "SO-1008",
+    "dataset_overrides": [
+      {
+        "collection": "sales_orders",
+        "id": "SO-1008",
+        "updates": {
+          "fulfillment_type": "drop_ship"
+        }
+      }
+    ],
+    "expected": {
+      "risk_level": "high",
+      "risk_flags_contains": ["low_customer_rating", "missing_linked_po_for_drop_shipping"],
+      "recommended_action_type": "escalate_to_manager",
+      "recommended_priority": "high"
+    }
+  },
+  {
+    "case_id": "WF-002",
+    "description": "Drop-shipping order missing PO returns create_purchase_order recommendation.",
+    "sales_order_id": "SO-1005",
+    "expected": {
+      "risk_level": "high",
+      "risk_flags_contains": ["missing_linked_po_for_drop_shipping"],
+      "recommended_action_type": "create_purchase_order",
+      "recommended_priority": "high"
+    }
+  },
+  {
+    "case_id": "WF-003",
+    "description": "Delayed logistics order returns contact_supplier recommendation.",
+    "sales_order_id": "SO-1006",
+    "expected": {
+      "risk_level": "medium",
+      "risk_flags_contains": ["delayed_logistics_event"],
+      "recommended_action_type": "contact_supplier",
+      "recommended_priority": "medium"
+    }
+  },
+  {
+    "case_id": "WF-004",
+    "description": "Low-margin order returns manager escalation recommendation.",
+    "sales_order_id": "SO-1004",
+    "expected": {
+      "risk_flags_contains": ["low_margin"],
+      "recommended_action_type": "escalate_to_manager",
+      "recommended_priority": "medium"
+    }
+  },
+  {
+    "case_id": "WF-005",
+    "description": "Healthy order returns monitor_only recommendation.",
+    "sales_order_id": "SO-1001",
+    "expected": {
+      "risk_level": "low",
+      "risk_flags_exact": [],
+      "recommended_action_type": "monitor_only",
+      "recommended_priority": "low"
+    }
+  },
+  {
+    "case_id": "WF-006",
+    "description": "Tool trace includes all required tool calls.",
+    "sales_order_id": "SO-1002",
+    "expected": {
+      "required_tool_calls": [
+        "load_synthetic_dataset",
+        "get_sales_order",
+        "get_customer_profile",
+        "get_drop_shipping_chain",
+        "list_logistics_events",
+        "calculate_order_margin",
+        "detect_order_risk"
+      ]
+    }
+  },
+  {
+    "case_id": "WF-007",
+    "description": "Approval request is always pending after workflow run.",
+    "sales_order_id": "SO-1003",
+    "expected": {
+      "approval_status": "pending",
+      "approval_required": true
+    }
+  },
+  {
+    "case_id": "WF-008",
+    "description": "Workflow does not mutate source synthetic dataset.",
+    "sales_order_id": "SO-1005",
+    "expected": {
+      "source_dataset_unchanged": true,
+      "approval_status": "pending"
+    }
+  }
+]

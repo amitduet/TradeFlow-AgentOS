@@ -4,6 +4,8 @@ All agents operate on synthetic data only. They may read synthetic records, prod
 
 Sprint 2 adds deterministic read-only tools that future agents may call before any LLM reasoning step. These tools load validated local JSON from `data/synthetic/tradeflow_seed.json`, never call the network, never mutate production systems, and return stable outputs for the same dataset.
 
+Sprint 3 adds the first controlled workflow orchestrator. It is agent-facing but not an unconstrained LLM agent: it receives a business goal, calls approved deterministic tools, records a trace, returns a structured recommendation, and creates a pending approval request before any business action.
+
 ## Deterministic Tool Contracts
 
 - `load_synthetic_dataset(path: str) -> TradeFlowDataset`: Load and validate the synthetic JSON dataset.
@@ -18,6 +20,51 @@ Sprint 2 adds deterministic read-only tools that future agents may call before a
 - `detect_order_risk(order_id: str) -> dict`: Return deterministic risk level, risk flags, and explanation using customer rating, logistics delay, missing drop-ship PO, margin, and payment status.
 
 These tools are the safe substrate future agents should use for business-status analysis. Agent prompts should treat tool output as authoritative synthetic context and should not infer hidden production state.
+
+## Sprint 3 Order-Risk Workflow Contract
+
+- Entry point: `analyze_sales_order_risk(sales_order_id: str, dataset_path: str | None = None) -> OrderRiskWorkflowResult`.
+- Required tools: `load_synthetic_dataset`, `get_sales_order`, `get_customer_profile`, `get_drop_shipping_chain`, `list_logistics_events`, `calculate_order_margin`, and `detect_order_risk`.
+- Output: sales order id, customer summary, order summary, margin summary, logistics summary, drop-shipping summary, deterministic risk level, risk flags, recommended action, `approval_required=true`, approval request, and tool-call trace.
+- Safety rule: the workflow creates only a pending approval request and never mutates source business data.
+
+## Tool-Call Trace Format
+
+Every deterministic tool call is wrapped and recorded with:
+
+- `tool_name`
+- `input`
+- `output_summary`
+- `success`
+- `error`
+- `started_at`
+- `completed_at`
+- `latency_ms`
+
+The trace is part of `OrderRiskWorkflowResult` so future LLM orchestration can be evaluated against actual tool use rather than claimed reasoning.
+
+## Recommendation Rules
+
+Sprint 3 recommendation rules are deterministic:
+
+- high risk plus customer rating <= 2: `escalate_to_manager`, high priority
+- drop-shipping order missing linked purchase order: `create_purchase_order`, high priority
+- delayed logistics event: `contact_supplier`, medium priority unless the order is high risk
+- low margin: `escalate_to_manager`, medium priority
+- otherwise: `monitor_only`, low priority
+
+All recommendations require human approval.
+
+## Approval Gate Contract
+
+The approval gate lives in `app/agents/approval_gate.py`.
+
+- `create_approval_request(...)` creates a pending request tied to `sales_order_id` and proposed action.
+- `approve_request(...)` changes status to `approved`.
+- `reject_request(...)` changes status to `rejected`.
+- Runtime state is stored in `data/runtime/approval_requests.json`.
+- Approval status can change only through explicit approval-gate calls.
+- Approval does not execute the business action in Sprint 3.
 
 ## Orchestrator Agent
 
