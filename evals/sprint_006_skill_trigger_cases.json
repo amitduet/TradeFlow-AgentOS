@@ -1,0 +1,141 @@
+{
+  "dataset_version": "sprint-006-skill-trigger-cases-v1",
+  "description": "Positive and negative deterministic trigger cases for Sprint 006 domain skills.",
+  "cases": [
+    {
+      "case_id": "order_risk_positive_analyze_so",
+      "skill": "order-risk-analysis",
+      "polarity": "positive",
+      "user_request": "Analyze sales order SO-1005",
+      "expected_skill": "order-risk-analysis"
+    },
+    {
+      "case_id": "order_risk_positive_customer_order",
+      "skill": "order-risk-analysis",
+      "polarity": "positive",
+      "user_request": "Check risk for this customer order",
+      "expected_skill": "order-risk-analysis"
+    },
+    {
+      "case_id": "order_risk_positive_safe_to_proceed",
+      "skill": "order-risk-analysis",
+      "polarity": "positive",
+      "user_request": "Is SO-1005 safe to proceed?",
+      "expected_skill": "order-risk-analysis"
+    },
+    {
+      "case_id": "order_risk_negative_supplier_record",
+      "skill": "order-risk-analysis",
+      "polarity": "negative",
+      "user_request": "Create a supplier contact record",
+      "expected_skill": null,
+      "focus_skill": "order-risk-analysis"
+    },
+    {
+      "case_id": "order_risk_negative_system_health",
+      "skill": "order-risk-analysis",
+      "polarity": "negative",
+      "user_request": "Show system health",
+      "expected_skill": null,
+      "focus_skill": "order-risk-analysis"
+    },
+    {
+      "case_id": "order_risk_negative_marketing",
+      "skill": "order-risk-analysis",
+      "polarity": "negative",
+      "user_request": "Write a marketing email",
+      "expected_skill": null,
+      "focus_skill": "order-risk-analysis"
+    },
+    {
+      "case_id": "po_positive_create_for_so",
+      "skill": "purchase-order-recommendation",
+      "polarity": "positive",
+      "user_request": "Should we create a purchase order for SO-1005?",
+      "expected_skill": "purchase-order-recommendation"
+    },
+    {
+      "case_id": "po_positive_recommendation",
+      "skill": "purchase-order-recommendation",
+      "polarity": "positive",
+      "user_request": "Prepare PO recommendation for this order",
+      "expected_skill": "purchase-order-recommendation"
+    },
+    {
+      "case_id": "po_positive_drop_shipping_draft",
+      "skill": "purchase-order-recommendation",
+      "polarity": "positive",
+      "user_request": "Does this drop-shipping order need a PO draft?",
+      "expected_skill": "purchase-order-recommendation"
+    },
+    {
+      "case_id": "po_negative_customer_rating",
+      "skill": "purchase-order-recommendation",
+      "polarity": "negative",
+      "user_request": "Analyze customer rating only",
+      "expected_skill": null,
+      "focus_skill": "purchase-order-recommendation"
+    },
+    {
+      "case_id": "po_negative_approve_order",
+      "skill": "purchase-order-recommendation",
+      "polarity": "negative",
+      "user_request": "Approve the order directly",
+      "expected_skill": null,
+      "focus_skill": "purchase-order-recommendation"
+    },
+    {
+      "case_id": "po_negative_logistics_events",
+      "skill": "purchase-order-recommendation",
+      "polarity": "negative",
+      "user_request": "Summarize logistics events",
+      "expected_skill": null,
+      "focus_skill": "purchase-order-recommendation"
+    },
+    {
+      "case_id": "approval_positive_high_risk",
+      "skill": "approval-gate-handling",
+      "polarity": "positive",
+      "user_request": "Can we approve this high-risk order?",
+      "expected_skill": "approval-gate-handling"
+    },
+    {
+      "case_id": "approval_positive_bypass",
+      "skill": "approval-gate-handling",
+      "polarity": "positive",
+      "user_request": "Bypass approval for SO-1005",
+      "expected_skill": "approval-gate-handling"
+    },
+    {
+      "case_id": "approval_positive_po_creation",
+      "skill": "approval-gate-handling",
+      "polarity": "positive",
+      "user_request": "What approval is required before PO creation?",
+      "expected_skill": "approval-gate-handling"
+    },
+    {
+      "case_id": "approval_negative_supplier_phone",
+      "skill": "approval-gate-handling",
+      "polarity": "negative",
+      "user_request": "List supplier phone numbers",
+      "expected_skill": null,
+      "focus_skill": "approval-gate-handling"
+    },
+    {
+      "case_id": "approval_negative_margin",
+      "skill": "approval-gate-handling",
+      "polarity": "negative",
+      "user_request": "Calculate order margin",
+      "expected_skill": null,
+      "focus_skill": "approval-gate-handling"
+    },
+    {
+      "case_id": "approval_negative_billing_address",
+      "skill": "approval-gate-handling",
+      "polarity": "negative",
+      "user_request": "Show customer billing address",
+      "expected_skill": null,
+      "focus_skill": "approval-gate-handling"
+    }
+  ]
+}

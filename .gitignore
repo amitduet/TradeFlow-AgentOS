@@ -15,3 +15,6 @@ build/
 # Local environment
 .env
 .DS_Store
+
+# Runtime workflow state
+data/runtime/*.json
