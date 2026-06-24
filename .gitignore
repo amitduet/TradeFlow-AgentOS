@@ -21,3 +21,4 @@ data/runtime/*.json
 
 # Local smoke-eval artifacts
 artifacts/provider_smoke/
+artifacts/quality_gate/

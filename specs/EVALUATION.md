@@ -12,6 +12,8 @@ Sprint 7 adds mocked real-provider integration tests before any live provider is
 
 Sprint 8 adds an opt-in provider smoke-eval harness for local or staging use. It validates live-provider behavior against business-domain planner cases only when explicitly enabled, while deterministic tests and CI continue to run without network access or credentials.
 
+Sprint 9 adds a unified local and CI quality gate. It aggregates tests, planner evals, skill evals, and provider smoke into one sanitized JSON report while preserving Sprint 8 skip behavior for missing live provider credentials.
+
 ## Why Synthetic Data
 
 The capstone must demonstrate realistic trading-company workflows without storing customer data, supplier terms, production orders, private receivables, or external system credentials. The canonical dataset in `data/synthetic/tradeflow_seed.json` is generated from a fixed seed and contains only fabricated records.
@@ -231,3 +233,51 @@ Non-secret provider values can also be supplied as `--provider`, `--model`, `--b
 Reports are optional sanitized JSON files under `artifacts/provider_smoke/`, which is ignored by Git. Reports include dataset version, mode, pass/fail counts, provider metadata, case outcomes, fallback state, safety outcome, route, risk, approval state, and validation errors. API keys, auth headers, token-like values, and secret-bearing exception text are redacted before output.
 
 Skip behavior exits zero when live smoke is disabled or credentials are missing. A configured live run exits non-zero only if one or more smoke cases fail. This keeps normal deterministic workflows stable while still giving local and staging runs a clear signal.
+
+## Sprint 9 Unified Quality Gate
+
+The unified gate runner is:
+
+```bash
+python scripts/run_agent_quality_gate.py
+```
+
+It runs the required local verification set:
+
+- `python -m pytest -q`
+- `python scripts/run_planner_evals.py`
+- `python scripts/run_skill_evals.py`
+- `python scripts/run_llm_provider_smoke.py`
+
+The default behavior continues after failures so the final report captures every gate outcome. Use `--stop-on-failure` to stop at the first failed gate.
+
+Reports are written under:
+
+```text
+artifacts/quality_gate/
+```
+
+Use `--json-out PATH` to choose a stable report path, for example:
+
+```bash
+python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/latest.json
+```
+
+The JSON report includes:
+
+- schema version and timestamps
+- total duration and per-command duration
+- command status, return code, stdout, stderr, and required flag
+- aggregate pass/fail/skip counts
+- failure summaries
+- runner options
+
+All report payloads are passed through `app/agents/redaction.py` before writing, so API keys, auth headers, token-like values, and secret-bearing provider text are removed.
+
+Provider smoke skip semantics are explicit:
+
+- default quality gate: disabled or missing live provider credentials are recorded as `skipped` and the gate can still pass
+- `--require-live-provider`: the runner invokes smoke with `--live`; if smoke skips because credentials or configuration are missing, the provider-smoke gate is converted to `failed` and the unified gate exits non-zero
+- configured live smoke: exits non-zero only when the smoke harness reports failed cases
+
+CI uses `.github/workflows/ci.yml` to install dependencies, run `python -m pytest -q`, and run `python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/ci.json`. Live provider smoke is not required by default. To enable it later, add repository secrets for `TRADEFLOW_LLM_PROVIDER`, `TRADEFLOW_LLM_MODEL`, and `TRADEFLOW_LLM_API_KEY`, set `TRADEFLOW_LLM_SMOKE_ENABLED=true`, and pass `--require-live-provider` in the workflow step.
