@@ -4,7 +4,7 @@ TradeFlow AgentOS is a Kaggle AI Agents capstone project for the Agents for Busi
 
 This Sprint 1 foundation is intentionally minimal. It does not connect to Odoo, production systems, real customer data, real transaction APIs, or real LLM calls. Every business action is synthetic, read-only, or draft-only, with human approval required before any purchase order, invoice, stock update, or customer message could become real.
 
-Sprint 2 adds a deterministic synthetic dataset and read-only tool layer under the same safety model. Sprint 3 adds the first agent-facing workflow orchestrator and approval gate on top of those tools. Sprint 4 adds a constrained planner facade that can interpret supported order-risk requests, select only an approved workflow, execute deterministic tools through the existing orchestrator, and produce cited, tool-grounded responses. Sprint 5 adds planner golden evals, structured traces, version metadata, and audit records for planner decisions. Sprint 6 adds business-readable domain runbooks, reusable skill files, a skill catalog, deterministic skill trigger evals, and loader helpers. Sprint 7 adds an opt-in real LLM provider behind the planner abstraction, with strict JSON validation and deterministic fallback. Tests and CI still do not require live external LLM credentials.
+Sprint 2 adds a deterministic synthetic dataset and read-only tool layer under the same safety model. Sprint 3 adds the first agent-facing workflow orchestrator and approval gate on top of those tools. Sprint 4 adds a constrained planner facade that can interpret supported order-risk requests, select only an approved workflow, execute deterministic tools through the existing orchestrator, and produce cited, tool-grounded responses. Sprint 5 adds planner golden evals, structured traces, version metadata, and audit records for planner decisions. Sprint 6 adds business-readable domain runbooks, reusable skill files, a skill catalog, deterministic skill trigger evals, and loader helpers. Sprint 7 adds an opt-in real LLM provider behind the planner abstraction, with strict JSON validation and deterministic fallback. Sprint 8 adds an opt-in provider smoke-eval harness for local or staging checks. Tests and CI still do not require live external LLM credentials.
 
 ## Business Problem
 
@@ -129,6 +129,8 @@ TRADEFLOW_LLM_MODEL=
 TRADEFLOW_LLM_API_KEY=
 TRADEFLOW_LLM_BASE_URL=
 TRADEFLOW_LLM_TIMEOUT_SECONDS=30
+TRADEFLOW_LLM_SMOKE_ENABLED=false
+TRADEFLOW_LLM_SMOKE_MAX_CASES=
 ```
 
 Run deterministic planner mode:
@@ -151,13 +153,34 @@ The LLM receives the user request, allowed planner routes, allowed recommendatio
 
 If the LLM fails, times out, returns malformed JSON, or violates planner contracts, the planner falls back to the deterministic provider. `PlannerTrace`, `PlannerRunMetadata`, CLI output, and audit records expose `provider_requested`, `provider_used`, `fallback_used`, `fallback_reason`, `llm_response_valid`, and `llm_validation_errors`.
 
-Manual smoke test with credentials:
+Provider smoke evals skip by default and make no live provider call:
 
 ```bash
 python scripts/run_llm_provider_smoke.py
 ```
 
-The smoke script sends one safe planner request and never executes business actions directly. Approval gates remain authoritative; the LLM can recommend review, escalation, draft preparation, or requiring approval, but cannot approve, execute, bypass, modify credit or supplier terms, execute payment, or update inventory.
+Run deterministic fake-provider smoke for local harness validation:
+
+```bash
+python scripts/run_llm_provider_smoke.py --fake-provider success
+python scripts/run_llm_provider_smoke.py --fake-provider invalid-json --max-cases 1
+```
+
+Run live provider smoke only with local or staging credentials and explicit opt-in:
+
+```bash
+TRADEFLOW_LLM_SMOKE_ENABLED=true \
+TRADEFLOW_LLM_PROVIDER=openai \
+TRADEFLOW_LLM_MODEL=<model-name> \
+TRADEFLOW_LLM_API_KEY=<local-secret> \
+python scripts/run_llm_provider_smoke.py --live --write-report
+```
+
+You can also pass non-secret provider settings with `--provider`, `--model`, `--base-url`, and `--timeout-seconds`; keep API keys in environment variables, not CLI history.
+
+Smoke reports are written under `artifacts/provider_smoke/` when requested. That path is ignored by Git, and reports redact API keys, auth headers, token-like values, and provider exception text before writing. A skipped smoke run exits zero; a configured live run exits non-zero only if a smoke case fails.
+
+The smoke script runs business-domain planner cases and never executes business actions directly. Approval gates remain authoritative; the LLM can recommend review, escalation, draft preparation, or requiring approval, but cannot approve, execute, bypass, modify credit or supplier terms, execute payment, or update inventory.
 
 ## Demo Scenarios
 
@@ -194,3 +217,7 @@ Sprint 6 establishes versioned business domain knowledge for future planner grou
 ## Sprint 7 Status
 
 Sprint 7 integrates a real LLM provider behind the constrained planner abstraction without changing the default test path. It adds provider selection, an OpenAI-compatible/Gemini/custom HTTP adapter, strict planner-output schema validation, deterministic fallback, provider metadata in traces and audits, CLI provider reporting, mocked provider tests, a manual smoke script, and setup documentation. Known limitations: the live provider path is intentionally minimal, does not stream responses, and only supports planner routing output; workflow execution and all business evidence remain deterministic and approval-gated. A recommended next sprint is to add provider-specific live smoke evals in a secrets-enabled local or staging environment while keeping CI deterministic.
+
+## Sprint 8 Status
+
+Sprint 8 adds a secrets-aware provider smoke-eval harness without changing deterministic defaults. It adds versioned smoke cases, opt-in live execution, deterministic fake-provider modes, sanitized JSON reports under ignored local artifacts, redaction helpers, and pytest coverage for skip behavior, fallback reporting, timeout/schema/unsafe responses, and secret leakage prevention. Live smoke remains manual or staging-only and is not required for CI.
