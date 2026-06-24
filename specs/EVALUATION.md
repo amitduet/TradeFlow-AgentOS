@@ -14,6 +14,8 @@ Sprint 8 adds an opt-in provider smoke-eval harness for local or staging use. It
 
 Sprint 9 adds a unified local and CI quality gate. It aggregates tests, planner evals, skill evals, and provider smoke into one sanitized JSON report while preserving Sprint 8 skip behavior for missing live provider credentials.
 
+Sprint 10 adds quality gate history, trend reporting, and release evidence packs. This creates an auditable record of recent quality runs, gate-level changes, and reviewer-ready release artifacts without adding network calls or requiring live provider credentials.
+
 ## Why Synthetic Data
 
 The capstone must demonstrate realistic trading-company workflows without storing customer data, supplier terms, production orders, private receivables, or external system credentials. The canonical dataset in `data/synthetic/tradeflow_seed.json` is generated from a fixed seed and contains only fabricated records.
@@ -281,3 +283,50 @@ Provider smoke skip semantics are explicit:
 - configured live smoke: exits non-zero only when the smoke harness reports failed cases
 
 CI uses `.github/workflows/ci.yml` to install dependencies, run `python -m pytest -q`, and run `python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/ci.json`. Live provider smoke is not required by default. To enable it later, add repository secrets for `TRADEFLOW_LLM_PROVIDER`, `TRADEFLOW_LLM_MODEL`, and `TRADEFLOW_LLM_API_KEY`, set `TRADEFLOW_LLM_SMOKE_ENABLED=true`, and pass `--require-live-provider` in the workflow step.
+
+## Sprint 10 Quality History and Release Evidence
+
+The quality gate now writes timestamped history by default:
+
+```bash
+python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/latest.json
+```
+
+History files are stored under:
+
+```text
+artifacts/quality_gate/history/
+```
+
+Use `--no-history` for one-off runs that should only write the requested `--json-out` path. Use `--max-history N` to prune older history files after a run.
+
+Trend summaries are generated from existing history reports:
+
+```bash
+python scripts/summarize_quality_history.py \
+  --history-dir artifacts/quality_gate/history \
+  --json-out artifacts/quality_gate/trend.json \
+  --markdown-out artifacts/quality_gate/trend.md
+```
+
+The trend summary includes total runs considered, latest and previous status, status-change flag, pass/fail/skip deltas, duration delta, latest per-gate status, per-gate changes, passing/failing streaks, and malformed reports that were ignored.
+
+Release evidence packs are generated from the latest quality report and optional history:
+
+```bash
+python scripts/build_release_evidence_pack.py \
+  --quality-report artifacts/quality_gate/latest.json \
+  --history-dir artifacts/quality_gate/history \
+  --out-dir artifacts/release_evidence/latest
+```
+
+The pack writes machine-readable JSON and reviewer-readable Markdown. It records release name, generated timestamp, git branch and commit, dirty status, overall quality status, gate summary, counts, provider-smoke skip explanation, local reproduction commands, artifact inventory, known limitations, and next recommended action.
+
+Generated artifacts stay ignored by Git:
+
+```text
+artifacts/quality_gate/
+artifacts/release_evidence/
+```
+
+CI writes `artifacts/quality_gate/latest.json`, builds the release evidence pack, and uploads quality/evidence artifacts. A failed gate still fails CI. Live provider smoke remains skipped by default unless credentials and `--require-live-provider` are explicitly configured.
