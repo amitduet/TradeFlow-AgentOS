@@ -4,6 +4,10 @@ TradeFlow AgentOS uses deterministic evaluation before agentic evaluation. Sprin
 
 Sprint 3 extends deterministic evaluation to the first agent-facing workflow. The workflow still has no LLM planner: evals verify that the orchestrator calls approved tools, produces typed recommendations, opens approval gates, and leaves the source dataset unchanged.
 
+Sprint 5 adds constrained-planner evaluation before live LLM integration. Planner evals verify route selection, recommended action, approval state, risk level, safety outcome, refusal or escalation behavior, and reason-code coverage against a versioned golden dataset.
+
+Sprint 6 adds deterministic skill trigger evaluation before live LLM integration. Skill evals verify that business-domain skill files trigger on supported requests, avoid wrong-skill matches on negative requests, and route approval-bypass phrasing to approval-gate handling rather than procurement execution.
+
 ## Why Synthetic Data
 
 The capstone must demonstrate realistic trading-company workflows without storing customer data, supplier terms, production orders, private receivables, or external system credentials. The canonical dataset in `data/synthetic/tradeflow_seed.json` is generated from a fixed seed and contains only fabricated records.
@@ -86,3 +90,46 @@ pytest
 ## Future Agent Evaluation
 
 Future sprints can add LLM-agent evals on top of this deterministic foundation. Those evals should verify that agents call these tools, cite returned synthetic facts, respect human approval gates, and avoid inventing hidden production state.
+
+## Sprint 5 Planner Evals
+
+Sprint 5 planner eval cases live in `evals/sprint_005_planner_golden_cases.json`. They cover:
+
+- low-risk order analysis
+- medium-risk supplier-contact recommendation
+- high-risk order requiring approval
+- missing drop-ship purchase order recommendation
+- missing sales order id
+- unknown sales order id
+- ambiguous order request
+- unsafe approval bypass attempt
+- unavailable or confidential data request
+- unsupported business action
+
+Run them with:
+
+```bash
+python scripts/run_planner_evals.py
+```
+
+The runner prints per-case pass/fail output, reports route/action/approval/safety/risk/reason-code metrics, and exits non-zero on any failed case or failed pass-rate threshold.
+
+## Sprint 6 Skill Trigger Evals
+
+Sprint 6 skill trigger cases live in `evals/sprint_006_skill_trigger_cases.json`. They cover:
+
+- positive and negative order-risk-analysis triggers
+- positive and negative purchase-order-recommendation triggers
+- positive and negative approval-gate-handling triggers
+- approval-bypass wording that must map to approval-gate handling
+- negative cases that must not trigger the wrong skill
+
+Run them with:
+
+```bash
+python scripts/run_skill_evals.py
+```
+
+The runner loads skill metadata from `skills/*/SKILL.md`, evaluates phrase-based trigger behavior through `app/agents/domain_skills.py`, prints per-case pass/fail output, reports trigger accuracy, negative trigger accuracy, and per-skill pass rates, and exits non-zero on failure.
+
+Sprint 6 skills differ from planner code: skills document business trigger boundaries and safety constraints, while planner code still performs deterministic routing and workflow execution. Future real LLM provider evals should require the provider to use these same runbooks, skill trigger boundaries, traces, audit logs, and approval constraints.
