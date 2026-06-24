@@ -39,6 +39,14 @@ jobs:
           path: artifacts/quality_gate/
           if-no-files-found: ignore
 
+      - name: Upload security eval artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-eval-artifacts
+          path: artifacts/security_evals/
+          if-no-files-found: ignore
+
       - name: Upload release evidence artifacts
         uses: actions/upload-artifact@v4
         if: success()

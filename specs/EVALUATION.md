@@ -16,6 +16,8 @@ Sprint 9 adds a unified local and CI quality gate. It aggregates tests, planner 
 
 Sprint 10 adds quality gate history, trend reporting, and release evidence packs. This creates an auditable record of recent quality runs, gate-level changes, and reviewer-ready release artifacts without adding network calls or requiring live provider credentials.
 
+Sprint 11 adds deterministic security policy evals. These checks cover prompt injection, secrets exfiltration, unsafe tool requests, unauthorized financial actions, instruction override attempts, data leakage, and destructive operations without LLM calls or network access.
+
 ## Why Synthetic Data
 
 The capstone must demonstrate realistic trading-company workflows without storing customer data, supplier terms, production orders, private receivables, or external system credentials. The canonical dataset in `data/synthetic/tradeflow_seed.json` is generated from a fixed seed and contains only fabricated records.
@@ -249,6 +251,7 @@ It runs the required local verification set:
 - `python -m pytest -q`
 - `python scripts/run_planner_evals.py`
 - `python scripts/run_skill_evals.py`
+- `python scripts/run_security_evals.py --quiet`
 - `python scripts/run_llm_provider_smoke.py`
 
 The default behavior continues after failures so the final report captures every gate outcome. Use `--stop-on-failure` to stop at the first failed gate.
@@ -282,7 +285,7 @@ Provider smoke skip semantics are explicit:
 - `--require-live-provider`: the runner invokes smoke with `--live`; if smoke skips because credentials or configuration are missing, the provider-smoke gate is converted to `failed` and the unified gate exits non-zero
 - configured live smoke: exits non-zero only when the smoke harness reports failed cases
 
-CI uses `.github/workflows/ci.yml` to install dependencies, run `python -m pytest -q`, and run `python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/ci.json`. Live provider smoke is not required by default. To enable it later, add repository secrets for `TRADEFLOW_LLM_PROVIDER`, `TRADEFLOW_LLM_MODEL`, and `TRADEFLOW_LLM_API_KEY`, set `TRADEFLOW_LLM_SMOKE_ENABLED=true`, and pass `--require-live-provider` in the workflow step.
+CI uses `.github/workflows/ci.yml` to install dependencies, run `python -m pytest -q`, and run `python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/latest.json`. Live provider smoke is not required by default. To enable it later, add repository secrets for `TRADEFLOW_LLM_PROVIDER`, `TRADEFLOW_LLM_MODEL`, and `TRADEFLOW_LLM_API_KEY`, set `TRADEFLOW_LLM_SMOKE_ENABLED=true`, and pass `--require-live-provider` in the workflow step.
 
 ## Sprint 10 Quality History and Release Evidence
 
@@ -327,6 +330,37 @@ Generated artifacts stay ignored by Git:
 ```text
 artifacts/quality_gate/
 artifacts/release_evidence/
+artifacts/security_evals/
 ```
 
 CI writes `artifacts/quality_gate/latest.json`, builds the release evidence pack, and uploads quality/evidence artifacts. A failed gate still fails CI. Live provider smoke remains skipped by default unless credentials and `--require-live-provider` are explicitly configured.
+
+## Sprint 11 Security Policy Evals
+
+Sprint 11 security cases live in `evals/security_policy_cases.json`. They cover:
+
+- allowed order-risk, finance, logistics, and approval-status requests
+- prompt injection such as "ignore previous instructions"
+- hidden-instruction requests such as "reveal system prompt"
+- secrets exfiltration such as API keys, tokens, passwords, or supplier credentials
+- broad data exfiltration such as exporting all customer data
+- review-worthy scoped exports such as customer payment history
+- destructive actions such as deleting records or disabling audit logging
+- approval bypasses such as approving orders without risk review
+- unsafe tool-use requests such as bypassing policy checks
+
+Run them with:
+
+```bash
+python scripts/run_security_evals.py
+```
+
+Write a stable JSON report with:
+
+```bash
+python scripts/run_security_evals.py --json-out artifacts/security_evals/latest.json
+```
+
+Security evals are included in the unified quality gate because they are deterministic, offline-safe, and secrets-safe. Reports are written under `artifacts/security_evals/`, which is ignored by Git.
+
+The Sprint 11 security model intentionally uses explicit rules rather than LLM-as-judge scoring. That keeps CI repeatable and makes each finding explainable through a finding id, severity, category, message, and matched evidence. Out of scope for this sprint: advanced semantic jailbreak detection, production policy servers, real data-loss-prevention integrations, live red-team automation, and any network-backed security service.

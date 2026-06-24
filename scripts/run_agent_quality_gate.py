@@ -1,7 +1,7 @@
 """Run the unified TradeFlow AgentOS quality gate.
 
-The gate aggregates deterministic tests, planner evals, skill evals, and the
-provider smoke harness into one sanitized JSON report.
+The gate aggregates deterministic tests, planner evals, skill evals, security
+evals, and the provider smoke harness into one sanitized JSON report.
 """
 
 from __future__ import annotations
@@ -86,6 +86,7 @@ def build_gate_commands(*, require_live_provider: bool = False) -> list[GateComm
         GateCommand("pytest", [sys.executable, "-m", "pytest", "-q"]),
         GateCommand("planner_evals", [sys.executable, "scripts/run_planner_evals.py"]),
         GateCommand("skill_evals", [sys.executable, "scripts/run_skill_evals.py"]),
+        GateCommand("security_evals", [sys.executable, "scripts/run_security_evals.py", "--quiet"]),
         GateCommand(
             "llm_provider_smoke",
             smoke_command,
