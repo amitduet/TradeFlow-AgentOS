@@ -28,6 +28,7 @@ from app.agents.planner_safety import (
     run_planner_safety_checks,
     safety_checks_passed,
 )
+from app.agents.redaction import redact_text
 from app.tools.tradeflow_tools import DEFAULT_DATASET_PATH
 
 
@@ -330,6 +331,8 @@ def _fallback_decision(
     validation_errors: list[str],
 ) -> tuple[PlannerDecision, PlannerProviderExecution]:
     decision = _rule_based_decision(planner_input.user_request)
+    safe_fallback_reason = redact_text(fallback_reason)
+    safe_validation_errors = [redact_text(error) or "" for error in validation_errors]
     return (
         decision.model_copy(
             update={"reason_codes": list(dict.fromkeys([*decision.reason_codes, "provider_fallback_used"]))}
@@ -340,9 +343,9 @@ def _fallback_decision(
             provider_mode="rule_based",
             provider_name=PROVIDER_NAME,
             fallback_used=True,
-            fallback_reason=fallback_reason,
+            fallback_reason=safe_fallback_reason,
             llm_response_valid=False if requested == "llm" else None,
-            llm_validation_errors=validation_errors,
+            llm_validation_errors=safe_validation_errors,
         ),
     )
 

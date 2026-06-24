@@ -10,6 +10,8 @@ Sprint 6 adds deterministic skill trigger evaluation before live LLM integration
 
 Sprint 7 adds mocked real-provider integration tests before any live provider is required in CI. These tests verify strict JSON schema validation, rejection of unsafe provider output, deterministic fallback, provider metadata in trace and audit records, and preservation of planner and skill eval pass rates without LLM credentials.
 
+Sprint 8 adds an opt-in provider smoke-eval harness for local or staging use. It validates live-provider behavior against business-domain planner cases only when explicitly enabled, while deterministic tests and CI continue to run without network access or credentials.
+
 ## Why Synthetic Data
 
 The capstone must demonstrate realistic trading-company workflows without storing customer data, supplier terms, production orders, private receivables, or external system credentials. The canonical dataset in `data/synthetic/tradeflow_seed.json` is generated from a fixed seed and contains only fabricated records.
@@ -177,3 +179,55 @@ python scripts/run_planner.py "Analyze sales order SO-1005" --show-trace
 ```
 
 Manual smoke tests must not be required for CI because they depend on local secrets, network availability, and provider behavior outside the deterministic repository contract. They are useful for checking provider configuration and adapter compatibility, not for replacing planner golden evals or skill trigger evals.
+
+## Sprint 8 Provider Smoke Evals
+
+Sprint 8 smoke cases live in `evals/llm_provider_smoke_cases.json`. They cover:
+
+- normal low-risk planning
+- high-risk order requiring pending approval
+- unavailable evidence that must not be hallucinated
+- unsafe approval-bypass or execution request
+- ambiguous request requiring clarification or safe fallback
+
+The smoke runner validates structural and policy behavior rather than exact prose:
+
+- planner output parses into existing contracts
+- provider metadata is emitted
+- fallback metadata is emitted when fallback is used
+- cited evidence remains grounded
+- unsafe actions are not approved
+- approval gates stay pending for workflow recommendations
+- missing-evidence and blocked cases do not cite invented workflow evidence
+
+Default smoke behavior skips cleanly and makes no provider call:
+
+```bash
+python scripts/run_llm_provider_smoke.py
+```
+
+Fake provider modes are deterministic and safe for CI-style local checks:
+
+```bash
+python scripts/run_llm_provider_smoke.py --fake-provider success
+python scripts/run_llm_provider_smoke.py --fake-provider invalid-json --max-cases 1
+python scripts/run_llm_provider_smoke.py --fake-provider schema-violation --max-cases 1
+python scripts/run_llm_provider_smoke.py --fake-provider timeout --max-cases 1
+python scripts/run_llm_provider_smoke.py --fake-provider unsafe --max-cases 1
+```
+
+Live smoke requires explicit opt-in and local or staging credentials:
+
+```bash
+TRADEFLOW_LLM_SMOKE_ENABLED=true \
+TRADEFLOW_LLM_PROVIDER=<provider> \
+TRADEFLOW_LLM_MODEL=<model> \
+TRADEFLOW_LLM_API_KEY=<local-secret> \
+python scripts/run_llm_provider_smoke.py --live --write-report
+```
+
+Non-secret provider values can also be supplied as `--provider`, `--model`, `--base-url`, and `--timeout-seconds`. API keys should stay in environment variables.
+
+Reports are optional sanitized JSON files under `artifacts/provider_smoke/`, which is ignored by Git. Reports include dataset version, mode, pass/fail counts, provider metadata, case outcomes, fallback state, safety outcome, route, risk, approval state, and validation errors. API keys, auth headers, token-like values, and secret-bearing exception text are redacted before output.
+
+Skip behavior exits zero when live smoke is disabled or credentials are missing. A configured live run exits non-zero only if one or more smoke cases fail. This keeps normal deterministic workflows stable while still giving local and staging runs a clear signal.
