@@ -69,6 +69,16 @@ def test_quality_gate_history_report_path_generation() -> None:
     assert path == Path("history") / "quality_gate_20260624T010203Z_abcdef1.json"
 
 
+def test_quality_gate_history_report_path_sanitizes_commit_fragment() -> None:
+    path = history_report_path(
+        history_dir=Path("history"),
+        timestamp_utc=datetime(2026, 6, 25, 7, 18, 27, tzinfo=UTC),
+        git_commit="Status: failed",
+    )
+
+    assert path == Path("history") / "quality_gate_20260625T071827Z_Status.json"
+
+
 def test_no_history_disables_timestamped_history_write(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setattr("scripts.run_agent_quality_gate.git_metadata", lambda: _git_info())
     monkeypatch.setattr("scripts.run_agent_quality_gate.subprocess.run", lambda *args, **kwargs: _completed())

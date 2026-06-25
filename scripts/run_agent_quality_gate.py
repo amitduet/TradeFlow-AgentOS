@@ -12,6 +12,7 @@ from datetime import UTC, datetime
 import json
 import platform
 from pathlib import Path
+import re
 import subprocess
 import sys
 import time
@@ -73,7 +74,7 @@ def history_report_path(
 ) -> Path:
     generated_at = timestamp_utc or datetime.now(UTC)
     stamp = generated_at.strftime("%Y%m%dT%H%M%SZ")
-    short_sha = git_commit[:7] if git_commit and git_commit != "unknown" else "unknown"
+    short_sha = _safe_filename_fragment(git_commit, max_length=7)
     return history_dir / f"quality_gate_{stamp}_{short_sha}.json"
 
 
@@ -242,7 +243,7 @@ def build_report(
         "git_branch": "unknown",
         "git_dirty": False,
     }
-    run_id_commit = git_info["git_commit"][:12] if git_info["git_commit"] != "unknown" else "unknown"
+    run_id_commit = _safe_filename_fragment(git_info["git_commit"], max_length=12)
     run_id = f"{finished_at.strftime('%Y%m%dT%H%M%SZ')}-{run_id_commit}"
 
     return redact_data(
@@ -361,6 +362,13 @@ def _failure_summary(stdout: str, stderr: str, returncode: int) -> str:
     if lines:
         return lines[-1]
     return f"Command exited with code {returncode}."
+
+
+def _safe_filename_fragment(value: str | None, *, max_length: int) -> str:
+    if not value or value == "unknown":
+        return "unknown"
+    fragment = re.sub(r"[^A-Za-z0-9._-]+", "_", value.strip())[:max_length].strip("._-")
+    return fragment or "unknown"
 
 
 if __name__ == "__main__":
