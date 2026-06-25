@@ -64,8 +64,10 @@ def build_release_evidence_pack(
             },
             "trend_summary": trend,
             "capstone": capstone,
+            "submission_package": _submission_package_evidence(report),
             "reproduce_commands": [
                 "python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/latest.json",
+                "python scripts/check_submission_package.py",
                 "python scripts/summarize_quality_history.py --markdown-out artifacts/quality_gate/trend.md",
                 "python scripts/build_release_evidence_pack.py --quality-report artifacts/quality_gate/latest.json",
                 "python scripts/build_agentops_evidence_index.py",
@@ -154,6 +156,11 @@ def render_evidence_markdown(evidence: dict[str, Any]) -> str:
             f"Latest security eval: `{capstone.get('latest_security_eval') or 'not found'}`",
             f"Latest guardrail/approval eval: `{capstone.get('latest_guardrail_or_approval_eval') or 'not found'}`",
             f"Quality history summary: `{capstone.get('quality_history_summary') or 'not found'}`",
+            "",
+            "## Submission Package",
+            "",
+            f"Submission readiness: {evidence.get('submission_package', {}).get('status') or 'not found'}",
+            f"Submission summary: {evidence.get('submission_package', {}).get('summary') or 'not found'}",
             "",
             "## Reproduce Locally",
             "",
@@ -269,6 +276,13 @@ def _capstone_evidence(capstone_dir: Path, report: dict[str, Any], trend: dict[s
         if (REPO_ROOT / "artifacts" / "quality_gate" / "trend.md").exists()
         else ("inline trend summary" if trend else None),
     }
+
+
+def _submission_package_evidence(report: dict[str, Any]) -> dict[str, Any]:
+    for gate in _normalized_gates(report):
+        if gate["name"] == "submission_package":
+            return {"status": gate["status"], "summary": gate["summary"] or "Submission package check ran."}
+    return {"status": None, "summary": None}
 
 
 def _latest_artifact(directory: Path, patterns: Sequence[str]) -> str | None:

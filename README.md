@@ -2,7 +2,7 @@
 
 TradeFlow AgentOS is a Kaggle AI Agents capstone project for the Agents for Business track. It models a multi-agent trading business control tower that evaluates customer order requests and coordinates Sales, CRM, Inventory, Finance, Purchase, and Logistics agents from order feasibility through delivery confirmation, invoice draft, and receivable follow-up.
 
-Sprint 013 adds capstone readiness assets for review: a deterministic AgentOps evidence index, a dependency-free static AgentOps dashboard, a Kaggle writeup draft, a demo video script, a public repository checklist, a media gallery plan, and a capstone readiness gate. Capstone docs live under `docs/capstone/`.
+Sprint 013 adds capstone readiness assets for review: a deterministic AgentOps evidence index, a dependency-free static AgentOps dashboard, a Kaggle writeup draft, a demo video script, a public repository checklist, a media gallery plan, and a capstone readiness gate. Sprint 014 adds the final Kaggle submission package, public judge quickstart, submission-package checker, and final media/storyboard docs. Capstone docs live under `docs/capstone/`.
 
 This Sprint 1 foundation is intentionally minimal. It does not connect to Odoo, production systems, real customer data, real transaction APIs, or real LLM calls. Every business action is synthetic, read-only, or draft-only, with human approval required before any purchase order, invoice, stock update, or customer message could become real.
 
@@ -17,6 +17,58 @@ Quick capstone verification:
 ```
 
 The static dashboard is generated at `artifacts/capstone/agentops_dashboard.html`, which is ignored by Git and safe to regenerate locally.
+
+## For Kaggle Judges
+
+TradeFlow AgentOS is ready to review from a clean clone without live credentials or networked business systems. The default path uses synthetic data, deterministic tools, deterministic evals, and local generated evidence.
+
+Clean-clone setup:
+
+```bash
+git clone https://github.com/amitduet/TradeFlow-AgentOS.git
+cd TradeFlow-AgentOS
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+```
+
+Run tests, evals, readiness checks, and the unified quality gate:
+
+```bash
+.venv/bin/python -m pytest -q
+.venv/bin/python scripts/run_planner_evals.py
+.venv/bin/python scripts/run_skill_evals.py
+.venv/bin/python scripts/run_security_evals.py
+.venv/bin/python scripts/run_guardrail_enforcement_evals.py
+.venv/bin/python scripts/check_capstone_readiness.py
+.venv/bin/python scripts/check_submission_package.py
+.venv/bin/python scripts/run_agent_quality_gate.py
+```
+
+Generate reviewer evidence and the static AgentOps dashboard:
+
+```bash
+.venv/bin/python scripts/run_agent_quality_gate.py --json-out artifacts/quality_gate/latest.json
+.venv/bin/python scripts/build_release_evidence_pack.py --quality-report artifacts/quality_gate/latest.json
+.venv/bin/python scripts/build_agentops_evidence_index.py
+.venv/bin/python scripts/build_agentops_dashboard.py
+```
+
+Expected release-candidate results:
+
+- Pytest: 140 passed
+- Planner evals: 10/10 passed
+- Skill evals: 18/18 passed
+- Security evals: 21/21 passed
+- Guardrail/approval workflow evals: 3/3 passed
+- Capstone readiness: 27/27 passed
+- Submission package: all checks passed
+- Unified quality gate: 7 passed, 0 failed, 1 skipped
+- Provider smoke: skipped cleanly by default
+
+Live provider smoke is optional. To keep review deterministic and secrets-safe, the default commands do not require a model provider key. Provider smoke runs only when explicitly enabled with local credentials and `--require-live-provider`.
+
+Generated local artifacts are ignored by Git and reproducible from the commands above. Relevant ignored paths include `artifacts/quality_gate/`, `artifacts/release_evidence/`, `artifacts/security_evals/`, `artifacts/approval_workflow_evals/`, and `artifacts/capstone/`. Final submission docs are committed under `docs/capstone/`.
 
 ## Business Problem
 
