@@ -83,6 +83,7 @@ def test_quality_gate_includes_security_eval_step() -> None:
         "skill_evals",
         "security_evals",
         "approval_workflow_evals",
+        "capstone_readiness",
         "llm_provider_smoke",
     ]
 

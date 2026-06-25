@@ -2,9 +2,21 @@
 
 TradeFlow AgentOS is a Kaggle AI Agents capstone project for the Agents for Business track. It models a multi-agent trading business control tower that evaluates customer order requests and coordinates Sales, CRM, Inventory, Finance, Purchase, and Logistics agents from order feasibility through delivery confirmation, invoice draft, and receivable follow-up.
 
+Sprint 013 adds capstone readiness assets for review: a deterministic AgentOps evidence index, a dependency-free static AgentOps dashboard, a Kaggle writeup draft, a demo video script, a public repository checklist, a media gallery plan, and a capstone readiness gate. Capstone docs live under `docs/capstone/`.
+
 This Sprint 1 foundation is intentionally minimal. It does not connect to Odoo, production systems, real customer data, real transaction APIs, or real LLM calls. Every business action is synthetic, read-only, or draft-only, with human approval required before any purchase order, invoice, stock update, or customer message could become real.
 
-Sprint 2 adds a deterministic synthetic dataset and read-only tool layer under the same safety model. Sprint 3 adds the first agent-facing workflow orchestrator and approval gate on top of those tools. Sprint 4 adds a constrained planner facade that can interpret supported order-risk requests, select only an approved workflow, execute deterministic tools through the existing orchestrator, and produce cited, tool-grounded responses. Sprint 5 adds planner golden evals, structured traces, version metadata, and audit records for planner decisions. Sprint 6 adds business-readable domain runbooks, reusable skill files, a skill catalog, deterministic skill trigger evals, and loader helpers. Sprint 7 adds an opt-in real LLM provider behind the planner abstraction, with strict JSON validation and deterministic fallback. Sprint 8 adds an opt-in provider smoke-eval harness for local or staging checks. Sprint 9 adds a unified local and CI quality gate for tests, evals, provider-smoke skip tracking, and sanitized JSON reports. Sprint 10 adds timestamped quality gate history, trend summaries, and release evidence packs. Sprint 11 adds deterministic security guardrails and security evals for prompt injection, unsafe tool use, secrets exfiltration, approval bypasses, data leakage, and destructive operations. Sprint 12 enforces those policy decisions in secure workflows with human approval requests, audit events, and deterministic approval workflow evals. Tests and CI still do not require live external LLM credentials.
+Sprint 2 adds a deterministic synthetic dataset and read-only tool layer under the same safety model. Sprint 3 adds the first agent-facing workflow orchestrator and approval gate on top of those tools. Sprint 4 adds a constrained planner facade that can interpret supported order-risk requests, select only an approved workflow, execute deterministic tools through the existing orchestrator, and produce cited, tool-grounded responses. Sprint 5 adds planner golden evals, structured traces, version metadata, and audit records for planner decisions. Sprint 6 adds business-readable domain runbooks, reusable skill files, a skill catalog, deterministic skill trigger evals, and loader helpers. Sprint 7 adds an opt-in real LLM provider behind the planner abstraction, with strict JSON validation and deterministic fallback. Sprint 8 adds an opt-in provider smoke-eval harness for local or staging checks. Sprint 9 adds a unified local and CI quality gate for tests, evals, provider-smoke skip tracking, and sanitized JSON reports. Sprint 10 adds timestamped quality gate history, trend summaries, and release evidence packs. Sprint 11 adds deterministic security guardrails and security evals for prompt injection, unsafe tool use, secrets exfiltration, approval bypasses, data leakage, and destructive operations. Sprint 12 enforces those policy decisions in secure workflows with human approval requests, audit events, and deterministic approval workflow evals. Sprint 13 adds AgentOps capstone evidence and readiness documentation. Tests and CI still do not require live external LLM credentials.
+
+Quick capstone verification:
+
+```bash
+.venv/bin/python scripts/run_agent_quality_gate.py
+.venv/bin/python scripts/build_agentops_evidence_index.py
+.venv/bin/python scripts/build_agentops_dashboard.py
+```
+
+The static dashboard is generated at `artifacts/capstone/agentops_dashboard.html`, which is ignored by Git and safe to regenerate locally.
 
 ## Business Problem
 
@@ -31,13 +43,13 @@ pytest
 
 ## Quality Gate
 
-Sprint 12 provides one local and CI-ready command for the required agent behavior, security checks, and approval workflow enforcement:
+Sprint 13 provides one local and CI-ready command for the required agent behavior, security checks, approval workflow enforcement, and capstone readiness:
 
 ```bash
 .venv/bin/python scripts/run_agent_quality_gate.py
 ```
 
-The quality gate runs the pytest suite, planner evals, skill evals, deterministic security evals, approval workflow evals, and LLM provider smoke evals. It writes sanitized JSON reports under `artifacts/quality_gate/`, which is ignored by Git. Each normal run also writes timestamped history under `artifacts/quality_gate/history/`. Missing live provider credentials are recorded as a clean provider-smoke skip by default.
+The quality gate runs the pytest suite, planner evals, skill evals, deterministic security evals, approval workflow evals, capstone readiness checks, and LLM provider smoke evals. It writes sanitized JSON reports under `artifacts/quality_gate/`, which is ignored by Git. Each normal run also writes timestamped history under `artifacts/quality_gate/history/`. Missing live provider credentials are recorded as a clean provider-smoke skip by default.
 
 Write a report to a stable path:
 
@@ -67,6 +79,14 @@ Build a release evidence pack for sprint review or capstone submission readiness
   --history-dir artifacts/quality_gate/history \
   --out-dir artifacts/release_evidence/latest \
   --release-name "Sprint 010"
+```
+
+Build AgentOps capstone evidence and the local static dashboard:
+
+```bash
+.venv/bin/python scripts/build_agentops_evidence_index.py
+.venv/bin/python scripts/build_agentops_dashboard.py
+.venv/bin/python scripts/check_capstone_readiness.py
 ```
 
 Run the deterministic security evals directly:

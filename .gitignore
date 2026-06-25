@@ -23,6 +23,7 @@ data/runtime/*.json
 artifacts/provider_smoke/
 artifacts/quality_gate/
 artifacts/release_evidence/
+artifacts/capstone/
 artifacts/security_evals/
 artifacts/approval_workflow_evals/
 artifacts/audit_trail/
