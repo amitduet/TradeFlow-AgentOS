@@ -18,6 +18,8 @@ Sprint 10 adds quality gate history, trend reporting, and release evidence packs
 
 Sprint 11 adds deterministic security policy evals. These checks cover prompt injection, secrets exfiltration, unsafe tool requests, unauthorized financial actions, instruction override attempts, data leakage, and destructive operations without LLM calls or network access.
 
+Sprint 12 adds deterministic approval workflow evals. These checks verify that Sprint 11 policy decisions are enforced in workflow outcomes, unsafe actions are blocked, review-worthy actions create pending approval requests, and audit events are emitted without external services.
+
 ## Why Synthetic Data
 
 The capstone must demonstrate realistic trading-company workflows without storing customer data, supplier terms, production orders, private receivables, or external system credentials. The canonical dataset in `data/synthetic/tradeflow_seed.json` is generated from a fixed seed and contains only fabricated records.
@@ -252,6 +254,7 @@ It runs the required local verification set:
 - `python scripts/run_planner_evals.py`
 - `python scripts/run_skill_evals.py`
 - `python scripts/run_security_evals.py --quiet`
+- `python scripts/run_approval_workflow_evals.py --quiet`
 - `python scripts/run_llm_provider_smoke.py`
 
 The default behavior continues after failures so the final report captures every gate outcome. Use `--stop-on-failure` to stop at the first failed gate.
@@ -331,6 +334,8 @@ Generated artifacts stay ignored by Git:
 artifacts/quality_gate/
 artifacts/release_evidence/
 artifacts/security_evals/
+artifacts/approval_workflow_evals/
+artifacts/audit_trail/
 ```
 
 CI writes `artifacts/quality_gate/latest.json`, builds the release evidence pack, and uploads quality/evidence artifacts. A failed gate still fails CI. Live provider smoke remains skipped by default unless credentials and `--require-live-provider` are explicitly configured.
@@ -364,3 +369,28 @@ python scripts/run_security_evals.py --json-out artifacts/security_evals/latest.
 Security evals are included in the unified quality gate because they are deterministic, offline-safe, and secrets-safe. Reports are written under `artifacts/security_evals/`, which is ignored by Git.
 
 The Sprint 11 security model intentionally uses explicit rules rather than LLM-as-judge scoring. That keeps CI repeatable and makes each finding explainable through a finding id, severity, category, message, and matched evidence. Out of scope for this sprint: advanced semantic jailbreak detection, production policy servers, real data-loss-prevention integrations, live red-team automation, and any network-backed security service.
+
+## Sprint 12 Approval Workflow Evals
+
+Sprint 12 approval workflow cases live in `evals/approval_workflow_cases.json`. They cover:
+
+- allowed business actions that should proceed without approval
+- blocked prompt-injection and unsafe requests that must not create approval requests
+- review-level sensitive exports that must create pending approval requests
+- deterministic audit event sequences for policy checks, allowed actions, blocked actions, and approval requests
+
+Run them with:
+
+```bash
+python scripts/run_approval_workflow_evals.py
+```
+
+Write a stable JSON report with:
+
+```bash
+python scripts/run_approval_workflow_evals.py --json-out artifacts/approval_workflow_evals/latest.json
+```
+
+Approval workflow evals are included in the unified quality gate because they are deterministic, offline-safe, and secrets-safe. Reports are written under `artifacts/approval_workflow_evals/`, which is ignored by Git.
+
+The Sprint 12 workflow is an enforcement harness, not a production approval database. Approval requests and audit events are in-memory structures suitable for unit tests and local evidence generation. Runtime audit files, if later generated, must stay under ignored `artifacts/audit_trail/`.
