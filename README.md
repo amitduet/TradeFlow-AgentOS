@@ -1,5 +1,81 @@
 # TradeFlow AgentOS
 
+## For Kaggle Judges
+
+TradeFlow AgentOS is ready to review from a clean clone without live credentials, external services, paid APIs, production data, or networked business systems. The default judge path is deterministic and local: it uses synthetic data, deterministic tools, deterministic planner fallback, approval gates, audit records, and reproducible local evidence.
+
+Environment assumptions: Python 3.11+ is recommended, with a local virtual environment and the committed development extras installed.
+
+Setup:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+```
+
+Full quality gate:
+
+```bash
+.venv/bin/python scripts/run_agent_quality_gate.py
+```
+
+High-risk CLI demo:
+
+```bash
+.venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json
+```
+
+Local UI demo:
+
+```bash
+.venv/bin/python scripts/run_tradeflow_agent_demo_ui.py
+```
+
+Then open `http://127.0.0.1:8765`.
+
+Expected high-risk behavior:
+
+- Risk classification: the committed high-risk scenario returns `risk_level: "high"` with explicit risk factors.
+- Deterministic tool/runbook path: the default planner selects the approved order-risk workflow, uses local synthetic data, and cites deterministic evidence.
+- Approval escalation: the recommended sensitive action remains pending and requires human approval.
+- Guardrail/audit explanation: response fields include approval reason, audit events, evidence refs, trace refs, and deterministic provider metadata.
+
+LLM planner mode is optional and opt-in only. The safe default is deterministic fallback; live provider smoke requires explicit local credentials and is skipped by the normal judge path.
+
+Additional verification commands:
+
+```bash
+.venv/bin/python -m pytest -q
+.venv/bin/python scripts/run_planner_evals.py
+.venv/bin/python scripts/run_skill_evals.py
+.venv/bin/python scripts/run_security_evals.py
+.venv/bin/python scripts/run_guardrail_approval_evals.py
+.venv/bin/python scripts/check_capstone_readiness.py
+.venv/bin/python scripts/check_submission_package.py
+git diff --check
+```
+
+Expected release-candidate results:
+
+- Pytest: 150 passed
+- Planner evals: 10/10 passed
+- Skill evals: 18/18 passed
+- Security evals: 21/21 passed
+- Guardrail/approval workflow evals: 3/3 passed
+- Capstone readiness: 27/27 passed
+- Submission package: 67/67 passed
+- Unified quality gate: 7 passed, 0 failed, 1 skipped
+- Provider smoke: skipped cleanly by default
+
+Submission artifacts:
+
+- Kaggle writeup: `docs/capstone/kaggle_writeup.md`
+- Five-minute video script: `docs/capstone/video_script_5min.md`
+- Media checklist: `docs/capstone/media_gallery_checklist.md`
+- Capstone documentation index: `docs/capstone/README.md`
+- Evidence pack builder: `scripts/build_release_evidence_pack.py`
+
 TradeFlow AgentOS is a Kaggle AI Agents capstone project for the Agents for Business track. It models a multi-agent trading business control tower that evaluates customer order requests and coordinates Sales, CRM, Inventory, Finance, Purchase, and Logistics agents from order feasibility through delivery confirmation, invoice draft, and receivable follow-up.
 
 Sprint 013 adds capstone readiness assets for review: a deterministic AgentOps evidence index, a dependency-free static AgentOps dashboard, a Kaggle writeup draft, a demo video script, a public repository checklist, a media gallery plan, and a capstone readiness gate. Sprint 014 adds the final Kaggle submission package, public judge quickstart, submission-package checker, and final media/storyboard docs. Sprint 015 adds a runnable judge-facing agent demo with end-user JSON scenarios, CLI output, and a lightweight local UI. Capstone docs live under `docs/capstone/`.
@@ -18,67 +94,6 @@ Quick capstone verification:
 
 The static dashboard is generated at `artifacts/capstone/agentops_dashboard.html`, which is ignored by Git and safe to regenerate locally.
 
-## For Kaggle Judges
-
-TradeFlow AgentOS is ready to review from a clean clone without live credentials or networked business systems. The default path uses synthetic data, deterministic tools, deterministic evals, and local generated evidence.
-
-Clean-clone setup:
-
-```bash
-git clone https://github.com/amitduet/TradeFlow-AgentOS.git
-cd TradeFlow-AgentOS
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-```
-
-Run tests, evals, readiness checks, and the unified quality gate:
-
-```bash
-.venv/bin/python -m pytest -q
-.venv/bin/python scripts/run_planner_evals.py
-.venv/bin/python scripts/run_skill_evals.py
-.venv/bin/python scripts/run_security_evals.py
-.venv/bin/python scripts/run_guardrail_approval_evals.py
-.venv/bin/python scripts/check_capstone_readiness.py
-.venv/bin/python scripts/check_submission_package.py
-.venv/bin/python scripts/run_agent_quality_gate.py
-```
-
-Run the end-user agent demo:
-
-```bash
-.venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json
-```
-
-The demo accepts the committed scenarios in `examples/demo/`: `low_risk_order.json`, `medium_risk_order.json`, and `high_risk_order.json`. The default path is deterministic and offline-safe; it uses synthetic data and writes only ignored local runtime files under `artifacts/demo_runtime/`. To try a configured live planner provider with deterministic fallback, add `--provider llm`.
-
-Expected sample output excerpt:
-
-```json
-{
-  "case_id": "demo-high-risk-order",
-  "risk_level": "high",
-  "risk_factors": ["missing_linked_po_for_drop_shipping"],
-  "recommended_action": {
-    "action_type": "create_purchase_order",
-    "priority": "high"
-  },
-  "approval_required": true,
-  "approval_reason": "Recommended action create_purchase_order requires human approval; risk_level=high; flags=missing_linked_po_for_drop_shipping.",
-  "tools_or_skills_used": ["workflow:analyze_sales_order_risk", "skill:order-risk-analysis"],
-  "evidence_refs": ["workflow_output:sales_order_id", "deterministic_tool_output:risk_level"]
-}
-```
-
-Optional local demo UI:
-
-```bash
-.venv/bin/python scripts/run_tradeflow_agent_demo_ui.py --port 8765
-```
-
-Then open `http://127.0.0.1:8765`. The UI is a Python standard-library local server; it does not require a frontend framework or external services.
-
 Generate reviewer evidence and the static AgentOps dashboard:
 
 ```bash
@@ -90,13 +105,13 @@ Generate reviewer evidence and the static AgentOps dashboard:
 
 Expected release-candidate results:
 
-- Pytest: 147 passed
+- Pytest: 150 passed
 - Planner evals: 10/10 passed
 - Skill evals: 18/18 passed
 - Security evals: 21/21 passed
 - Guardrail/approval workflow evals: 3/3 passed
 - Capstone readiness: 27/27 passed
-- Submission package: 44/44 passed
+- Submission package: 67/67 passed
 - Unified quality gate: 7 passed, 0 failed, 1 skipped
 - Provider smoke: skipped cleanly by default
 

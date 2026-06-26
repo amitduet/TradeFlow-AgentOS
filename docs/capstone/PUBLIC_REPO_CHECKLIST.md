@@ -3,7 +3,8 @@
 ## README Quality
 
 - README explains the business problem and Agents for Business track fit.
-- README includes setup commands and core verification commands.
+- README includes setup commands, full quality gate, CLI demo command, local UI command, and local UI URL.
+- README states that the default judge path uses no external services, no production data, and deterministic fallback by default.
 - README points reviewers to capstone docs and generated AgentOps artifacts.
 
 ## Setup Commands
@@ -14,6 +15,8 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 .venv/bin/python -m pytest -q
 .venv/bin/python scripts/run_agent_quality_gate.py
+.venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json
+.venv/bin/python scripts/run_tradeflow_agent_demo_ui.py
 ```
 
 ## No Secrets
@@ -36,14 +39,18 @@ pip install -e ".[dev]"
 - Planner evals: `.venv/bin/python scripts/run_planner_evals.py`
 - Skill evals: `.venv/bin/python scripts/run_skill_evals.py`
 - Security evals: `.venv/bin/python scripts/run_security_evals.py`
-- Guardrail evals: `.venv/bin/python scripts/run_guardrail_enforcement_evals.py`
+- Guardrail approval evals: `.venv/bin/python scripts/run_guardrail_approval_evals.py`
 - Capstone readiness: `.venv/bin/python scripts/check_capstone_readiness.py`
+- Submission package: `.venv/bin/python scripts/check_submission_package.py`
 - Unified gate: `.venv/bin/python scripts/run_agent_quality_gate.py`
 
 ## Screenshots and Video Plan
 
-- Capture README and capstone docs.
+- Capture README judge quickstart.
+- Capture CLI high-risk JSON output.
+- Capture local UI home page, scenario list, and high-risk result.
 - Capture quality gate terminal summary.
+- Capture capstone readiness and submission-package check output.
 - Capture security and approval eval summaries.
 - Capture generated AgentOps dashboard.
 - Keep demo under five minutes.
@@ -65,6 +72,8 @@ pip install -e ".[dev]"
 - `.venv/bin/python -m pytest -q`
 - `.venv/bin/python scripts/run_agent_quality_gate.py`
 - `.venv/bin/python scripts/check_capstone_readiness.py`
+- `.venv/bin/python scripts/check_submission_package.py`
+- `.venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json`
 - `.venv/bin/python scripts/build_agentops_evidence_index.py`
 - `.venv/bin/python scripts/build_agentops_dashboard.py`
 - `git diff --check`

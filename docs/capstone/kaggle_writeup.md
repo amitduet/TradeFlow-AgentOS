@@ -78,7 +78,7 @@ For a reviewer, the useful part is not only the workflow output. It is the combi
 
 TradeFlow AgentOS uses synthetic data and local artifacts. It is not connected to production ERP, CRM, banking, email, inventory, or logistics systems. The approval store is local, the dashboard is static, and live provider smoke is opt-in.
 
-Future work would include richer data, a durable approval store, role-based access control, production observability, deeper policy coverage, staging integrations, and carefully controlled live-provider evaluation.
+Future work would include a hosted demo, a richer UI, real ERP integration, A2A/MCP interoperability, deeper observability, richer data, a durable approval store, role-based access control, deeper policy coverage, staging integrations, and carefully controlled live-provider evaluation.
 
 ## How to Run / Project Link
 

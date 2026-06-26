@@ -27,6 +27,8 @@ Trading companies often answer order questions under time pressure while balanci
 
 TradeFlow AgentOS models a business control tower with deterministic tools, specialized agent contracts, runbook-backed skills, a constrained planner, security policy checks, human approval workflow, audit trail helpers, and a unified quality gate. It uses synthetic data only and keeps generated evidence under ignored artifact paths.
 
+Sprint 015 added the runnable judge-facing CLI and local stdlib-only UI demo. Sprint 016 freezes the submission path around that demo, the README judge quickstart, final Kaggle docs, media checklist, capstone index, and submission-package checker without adding production integrations or new agent behavior.
+
 ## Architecture Summary
 
 The orchestrator classifies supported requests and routes them to approved workflows. Domain agents represent Sales, CRM, Inventory, Finance, Purchase, and Logistics responsibilities. The planner can run in deterministic mode by default and can use an optional provider adapter only when explicitly configured. Security and approval enforcement sit around workflow execution so unsafe requests are blocked or routed to review.
@@ -79,10 +81,11 @@ pip install -e ".[dev]"
 ## Demo Path
 
 1. Show the README and capstone docs.
-2. Run the unified quality gate.
-3. Run security and approval evals.
-4. Generate the AgentOps evidence index and dashboard.
-5. Open the static dashboard from `artifacts/capstone/agentops_dashboard.html`.
+2. Run the high-risk CLI demo: `.venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json`.
+3. Run the local UI: `.venv/bin/python scripts/run_tradeflow_agent_demo_ui.py`, then open `http://127.0.0.1:8765`.
+4. Run the unified quality gate and final submission-package checks.
+5. Generate the AgentOps evidence index and dashboard.
+6. Open the static dashboard from `artifacts/capstone/agentops_dashboard.html`.
 
 ## Known Limitations
 
@@ -96,6 +99,8 @@ pip install -e ".[dev]"
 
 - Quality gate passes locally.
 - Capstone readiness checker passes.
+- Submission package checker passes.
+- CLI high-risk demo and local UI smoke path are documented and runnable.
 - AgentOps evidence index and dashboard are generated.
 - Kaggle writeup is under 2,500 words.
 - Demo script is rehearsed under five minutes.
