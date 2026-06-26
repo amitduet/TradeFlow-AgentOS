@@ -2,7 +2,7 @@
 
 TradeFlow AgentOS is a Kaggle AI Agents capstone project for the Agents for Business track. It models a multi-agent trading business control tower that evaluates customer order requests and coordinates Sales, CRM, Inventory, Finance, Purchase, and Logistics agents from order feasibility through delivery confirmation, invoice draft, and receivable follow-up.
 
-Sprint 013 adds capstone readiness assets for review: a deterministic AgentOps evidence index, a dependency-free static AgentOps dashboard, a Kaggle writeup draft, a demo video script, a public repository checklist, a media gallery plan, and a capstone readiness gate. Sprint 014 adds the final Kaggle submission package, public judge quickstart, submission-package checker, and final media/storyboard docs. Capstone docs live under `docs/capstone/`.
+Sprint 013 adds capstone readiness assets for review: a deterministic AgentOps evidence index, a dependency-free static AgentOps dashboard, a Kaggle writeup draft, a demo video script, a public repository checklist, a media gallery plan, and a capstone readiness gate. Sprint 014 adds the final Kaggle submission package, public judge quickstart, submission-package checker, and final media/storyboard docs. Sprint 015 adds a runnable judge-facing agent demo with end-user JSON scenarios, CLI output, and a lightweight local UI. Capstone docs live under `docs/capstone/`.
 
 This Sprint 1 foundation is intentionally minimal. It does not connect to Odoo, production systems, real customer data, real transaction APIs, or real LLM calls. Every business action is synthetic, read-only, or draft-only, with human approval required before any purchase order, invoice, stock update, or customer message could become real.
 
@@ -39,11 +39,45 @@ Run tests, evals, readiness checks, and the unified quality gate:
 .venv/bin/python scripts/run_planner_evals.py
 .venv/bin/python scripts/run_skill_evals.py
 .venv/bin/python scripts/run_security_evals.py
-.venv/bin/python scripts/run_guardrail_enforcement_evals.py
+.venv/bin/python scripts/run_guardrail_approval_evals.py
 .venv/bin/python scripts/check_capstone_readiness.py
 .venv/bin/python scripts/check_submission_package.py
 .venv/bin/python scripts/run_agent_quality_gate.py
 ```
+
+Run the end-user agent demo:
+
+```bash
+.venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json
+```
+
+The demo accepts the committed scenarios in `examples/demo/`: `low_risk_order.json`, `medium_risk_order.json`, and `high_risk_order.json`. The default path is deterministic and offline-safe; it uses synthetic data and writes only ignored local runtime files under `artifacts/demo_runtime/`. To try a configured live planner provider with deterministic fallback, add `--provider llm`.
+
+Expected sample output excerpt:
+
+```json
+{
+  "case_id": "demo-high-risk-order",
+  "risk_level": "high",
+  "risk_factors": ["missing_linked_po_for_drop_shipping"],
+  "recommended_action": {
+    "action_type": "create_purchase_order",
+    "priority": "high"
+  },
+  "approval_required": true,
+  "approval_reason": "Recommended action create_purchase_order requires human approval; risk_level=high; flags=missing_linked_po_for_drop_shipping.",
+  "tools_or_skills_used": ["workflow:analyze_sales_order_risk", "skill:order-risk-analysis"],
+  "evidence_refs": ["workflow_output:sales_order_id", "deterministic_tool_output:risk_level"]
+}
+```
+
+Optional local demo UI:
+
+```bash
+.venv/bin/python scripts/run_tradeflow_agent_demo_ui.py --port 8765
+```
+
+Then open `http://127.0.0.1:8765`. The UI is a Python standard-library local server; it does not require a frontend framework or external services.
 
 Generate reviewer evidence and the static AgentOps dashboard:
 
@@ -56,19 +90,27 @@ Generate reviewer evidence and the static AgentOps dashboard:
 
 Expected release-candidate results:
 
-- Pytest: 140 passed
+- Pytest: 147 passed
 - Planner evals: 10/10 passed
 - Skill evals: 18/18 passed
 - Security evals: 21/21 passed
 - Guardrail/approval workflow evals: 3/3 passed
 - Capstone readiness: 27/27 passed
-- Submission package: all checks passed
+- Submission package: 44/44 passed
 - Unified quality gate: 7 passed, 0 failed, 1 skipped
 - Provider smoke: skipped cleanly by default
 
 Live provider smoke is optional. To keep review deterministic and secrets-safe, the default commands do not require a model provider key. Provider smoke runs only when explicitly enabled with local credentials and `--require-live-provider`.
 
 Generated local artifacts are ignored by Git and reproducible from the commands above. Relevant ignored paths include `artifacts/quality_gate/`, `artifacts/release_evidence/`, `artifacts/security_evals/`, `artifacts/approval_workflow_evals/`, and `artifacts/capstone/`. Final submission docs are committed under `docs/capstone/`.
+
+Capstone submission references:
+
+- Kaggle writeup: `docs/capstone/kaggle_writeup.md`
+- Five-minute video script: `docs/capstone/video_script_5min.md`
+- Media checklist: `docs/capstone/media_gallery_checklist.md`
+- Evidence pack builder: `scripts/build_release_evidence_pack.py`
+- Capstone documentation index: `docs/capstone/README.md`
 
 ## Business Problem
 

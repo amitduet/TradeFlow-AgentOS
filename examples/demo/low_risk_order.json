@@ -1,0 +1,11 @@
+{
+  "case_id": "demo-low-risk-order",
+  "user_goal": "Review whether the customer order can proceed with routine monitoring.",
+  "workflow_type": "customer_order_risk_assessment",
+  "sales_order_id": "SO-1001",
+  "business_context": {
+    "customer_signal": "Strong customer rating and paid invoice history",
+    "decision_needed": "Confirm whether standard monitoring is enough",
+    "operator_role": "sales_ops"
+  }
+}

@@ -6,13 +6,23 @@ import argparse
 import json
 from pathlib import Path
 import re
+import subprocess
 import sys
+import tempfile
 from typing import Any, Sequence
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCS_DIR = REPO_ROOT / "docs" / "capstone"
 README = REPO_ROOT / "README.md"
+DEMO_RUNNER = REPO_ROOT / "scripts" / "run_tradeflow_agent_demo.py"
+DEMO_INPUTS_DIR = REPO_ROOT / "examples" / "demo"
+REQUIRED_DEMO_INPUTS = [
+    "low_risk_order.json",
+    "medium_risk_order.json",
+    "high_risk_order.json",
+]
+DEMO_RUN_COMMAND = "python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json"
 REQUIRED_DOCS = {
     "kaggle_writeup": "kaggle_writeup.md",
     "video_script": "video_script_5min.md",
@@ -56,6 +66,20 @@ def run_submission_checks(*, docs_dir: Path = DOCS_DIR, readme_path: Path = READ
             _rel(readme_path),
         )
     )
+    checks.append(
+        _check(
+            "readme_has_demo_run_command",
+            DEMO_RUN_COMMAND in readme_text
+            or ".venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json"
+            in readme_text,
+            _rel(readme_path),
+        )
+    )
+    checks.append(_check("demo_runner_exists", DEMO_RUNNER.exists(), _rel(DEMO_RUNNER)))
+    for filename in REQUIRED_DEMO_INPUTS:
+        path = DEMO_INPUTS_DIR / filename
+        checks.append(_check(f"demo_input_exists:{filename}", path.exists(), _rel(path)))
+    checks.append(_check("demo_runs_offline", _demo_runs_offline(), "high_risk_order.json deterministic run"))
 
     index_text = _read(docs["capstone_index"])
     for filename in ["kaggle_writeup.md", "video_script_5min.md", "media_gallery_checklist.md"]:
@@ -139,6 +163,42 @@ def _rel(path: Path) -> str:
         return path.resolve().relative_to(REPO_ROOT).as_posix()
     except ValueError:
         return path.name
+
+
+def _demo_runs_offline() -> bool:
+    if not DEMO_RUNNER.exists() or not (DEMO_INPUTS_DIR / "high_risk_order.json").exists():
+        return False
+    with tempfile.TemporaryDirectory(prefix="tradeflow-demo-check-") as tmp:
+        approval_path = Path(tmp) / "approval_requests.json"
+        audit_path = Path(tmp) / "planner_audit.jsonl"
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(DEMO_RUNNER),
+                "--input",
+                str(DEMO_INPUTS_DIR / "high_risk_order.json"),
+                "--json",
+                "--approval-storage-path",
+                str(approval_path),
+                "--audit-log-path",
+                str(audit_path),
+            ],
+            cwd=REPO_ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    if completed.returncode != 0:
+        return False
+    try:
+        payload = json.loads(completed.stdout)
+    except json.JSONDecodeError:
+        return False
+    return (
+        payload.get("case_id") == "demo-high-risk-order"
+        and payload.get("risk_level") == "high"
+        and payload.get("approval_required") is True
+    )
 
 
 if __name__ == "__main__":

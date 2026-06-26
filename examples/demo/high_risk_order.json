@@ -1,0 +1,11 @@
+{
+  "case_id": "demo-high-risk-order",
+  "user_goal": "Review the sales order, purchase order dependency, shipment risk, and approval path before action.",
+  "workflow_type": "approval_required_decision_path",
+  "sales_order_id": "SO-1005",
+  "business_context": {
+    "customer_signal": "High-value drop-ship customer order",
+    "decision_needed": "Determine whether a purchase order draft requires manager approval",
+    "operator_role": "tradeflow_controller"
+  }
+}

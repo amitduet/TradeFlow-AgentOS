@@ -71,7 +71,11 @@ def test_submission_package_checker_detects_placeholder_markers(tmp_path: Path) 
     )
     _write(docs_dir / "extra.md", "TODO replace this later")
     readme = tmp_path / "README.md"
-    _write(readme, "## For Kaggle Judges\n")
+    _write(
+        readme,
+        "## For Kaggle Judges\n"
+        ".venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json\n",
+    )
 
     exit_code, report = run_submission_checks(docs_dir=docs_dir, readme_path=readme)
     failed_names = [check["name"] for check in report["checks"] if not check["passed"]]
@@ -87,7 +91,11 @@ def test_submission_package_checker_detects_missing_index_link(tmp_path: Path) -
     _write(docs_dir / "media_gallery_checklist.md", "media checklist")
     _write(docs_dir / "README.md", "kaggle_writeup.md video_script_5min.md For Kaggle Judges README.md")
     readme = tmp_path / "README.md"
-    _write(readme, "## For Kaggle Judges\n")
+    _write(
+        readme,
+        "## For Kaggle Judges\n"
+        ".venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json\n",
+    )
 
     exit_code, report = run_submission_checks(docs_dir=docs_dir, readme_path=readme)
     failed_names = [check["name"] for check in report["checks"] if not check["passed"]]

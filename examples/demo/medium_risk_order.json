@@ -1,0 +1,11 @@
+{
+  "case_id": "demo-medium-risk-order",
+  "user_goal": "Assess supplier and logistics risk before committing to the customer delivery date.",
+  "workflow_type": "supplier_logistics_payment_term_risk_analysis",
+  "sales_order_id": "SO-1006",
+  "business_context": {
+    "customer_signal": "Good customer rating with active procurement fulfillment",
+    "decision_needed": "Decide whether logistics follow-up is needed",
+    "operator_role": "supply_chain_ops"
+  }
+}
