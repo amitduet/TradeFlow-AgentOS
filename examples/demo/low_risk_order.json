@@ -4,8 +4,10 @@
   "workflow_type": "customer_order_risk_assessment",
   "sales_order_id": "SO-1001",
   "business_context": {
+    "customer_id": "CUST-001",
     "customer_signal": "Strong customer rating and paid invoice history",
     "decision_needed": "Confirm whether standard monitoring is enough",
-    "operator_role": "sales_ops"
+    "operator_role": "sales_ops",
+    "product_code": "PRD-SODA-ASH-DENSE"
   }
 }

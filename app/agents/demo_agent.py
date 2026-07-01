@@ -13,6 +13,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.agents.demo_data import build_demo_order_context
 from app.agents.domain_skills import match_skill_for_request
 from app.agents.llm_planner import plan_and_execute_user_request
 from app.agents.redaction import redact_data
@@ -69,6 +70,7 @@ class TradeFlowAgentDemoResponse(BaseModel):
     audit_events: list[DemoAuditEvent]
     evidence_refs: list[str]
     trace_refs: dict[str, Any]
+    demo_business_context: dict[str, Any] = Field(default_factory=dict)
     success: bool
     error: str | None = None
 
@@ -89,6 +91,7 @@ def run_tradeflow_agent_demo(
     audit_log_path: str | Path | None = None,
 ) -> TradeFlowAgentDemoResponse:
     """Run a validated demo scenario through existing planner/workflow components."""
+    demo_business_context = _build_demo_business_context(demo_input)
     user_request = _build_user_request(demo_input)
     planner_result = plan_and_execute_user_request(
         user_request=user_request,
@@ -142,6 +145,7 @@ def run_tradeflow_agent_demo(
             "safety_outcome": planner_result.safety_outcome,
             "reason_codes": planner_result.trace.reason_codes,
         },
+        demo_business_context=demo_business_context,
         success=planner_result.success,
         error=planner_result.error,
     )
@@ -158,6 +162,16 @@ def _build_user_request(demo_input: TradeFlowDemoInput) -> str:
         "Analyze sales order risk and prepare an action recommendation "
         f"for sales order {demo_input.sales_order_id}."
     )
+
+
+def _build_demo_business_context(demo_input: TradeFlowDemoInput) -> dict[str, Any]:
+    product_code = demo_input.business_context.get("product_code")
+    customer_id = demo_input.business_context.get("customer_id")
+    if product_code is None and customer_id is None:
+        return {}
+    if not isinstance(product_code, str) or not isinstance(customer_id, str):
+        raise ValueError("business_context must include string product_code and customer_id for demo data enrichment")
+    return build_demo_order_context(product_code=product_code, customer_id=customer_id)
 
 
 def _tools_or_skills_used(planner_result: Any, matched_skill: str | None) -> list[str]:

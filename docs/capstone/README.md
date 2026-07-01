@@ -46,6 +46,15 @@ Open `http://127.0.0.1:8765`.
 
 Sprint 016 submission freeze keeps this path local and deterministic: no production data, no external services, no paid API dependency, and no live planner provider unless explicitly opted into by the reviewer.
 
+Sprint 017 adds a small sanitized demo business dataset under `examples/demo/data/` for judge-friendly realism:
+
+- `demo_products.json`: 10 fake product/package records.
+- `demo_customers.json`: 10 fictional customer profiles with example.com contacts.
+- `demo_inventory.json`: deterministic stock, reservation, availability, warehouse, and status records.
+- `demo_finance_opening_balance.json`: simple USD opening balance for demo context.
+
+The demo examples reference those fake customer and product identifiers, and the CLI/UI response can surface product, customer, available inventory, and demo-only inventory signals. This remains local, deterministic, fake, and API-key-free by default.
+
 ## Evidence and Dashboard Generation
 
 Generate the deterministic evidence index:

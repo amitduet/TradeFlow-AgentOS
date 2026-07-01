@@ -1,0 +1,9 @@
+{
+  "currency": "USD",
+  "opening_cash_balance": 100000,
+  "opening_receivables": 0,
+  "opening_payables": 0,
+  "opening_inventory_value": 248500,
+  "effective_date": "2026-01-01",
+  "note": "Sanitized demo opening balance for Kaggle judging."
+}
