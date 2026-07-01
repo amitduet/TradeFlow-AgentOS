@@ -11,6 +11,8 @@ import sys
 import tempfile
 from typing import Any, Sequence
 
+from app.agents.demo_data import load_demo_business_data
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCS_DIR = REPO_ROOT / "docs" / "capstone"
@@ -18,10 +20,17 @@ README = REPO_ROOT / "README.md"
 DEMO_RUNNER = REPO_ROOT / "scripts" / "run_tradeflow_agent_demo.py"
 DEMO_UI_RUNNER = REPO_ROOT / "scripts" / "run_tradeflow_agent_demo_ui.py"
 DEMO_INPUTS_DIR = REPO_ROOT / "examples" / "demo"
+DEMO_DATA_DIR = DEMO_INPUTS_DIR / "data"
 REQUIRED_DEMO_INPUTS = [
     "low_risk_order.json",
     "medium_risk_order.json",
     "high_risk_order.json",
+]
+REQUIRED_DEMO_DATA_FILES = [
+    "demo_products.json",
+    "demo_customers.json",
+    "demo_inventory.json",
+    "demo_finance_opening_balance.json",
 ]
 DEMO_RUN_COMMAND = ".venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json"
 DEMO_UI_COMMAND = ".venv/bin/python scripts/run_tradeflow_agent_demo_ui.py"
@@ -126,6 +135,47 @@ def run_submission_checks(*, docs_dir: Path = DOCS_DIR, readme_path: Path = READ
     for filename in REQUIRED_DEMO_INPUTS:
         path = DEMO_INPUTS_DIR / filename
         checks.append(_check(f"demo_input_exists:{filename}", path.exists(), _rel(path)))
+    for filename in REQUIRED_DEMO_DATA_FILES:
+        path = DEMO_DATA_DIR / filename
+        checks.append(_check(f"demo_data_exists:{filename}", path.exists(), _rel(path)))
+    demo_data = _load_demo_data_for_checks()
+    checks.append(
+        _check(
+            "demo_data_has_10_products",
+            demo_data is not None and len(demo_data["products"]) == 10,
+            "examples/demo/data/demo_products.json should contain exactly 10 products",
+        )
+    )
+    checks.append(
+        _check(
+            "demo_data_has_10_customers",
+            demo_data is not None and len(demo_data["customers"]) == 10,
+            "examples/demo/data/demo_customers.json should contain exactly 10 customers",
+        )
+    )
+    checks.append(
+        _check(
+            "demo_data_inventory_refs_products",
+            demo_data is not None and _inventory_refs_known_products(demo_data),
+            "every demo inventory product_code must exist in demo_products.json",
+        )
+    )
+    checks.append(
+        _check(
+            "demo_data_opening_cash_balance",
+            demo_data is not None
+            and demo_data["finance_opening_balance"].get("currency") == "USD"
+            and demo_data["finance_opening_balance"].get("opening_cash_balance") == 100000,
+            "finance opening balance must be exactly 100000 USD",
+        )
+    )
+    checks.append(
+        _check(
+            "demo_inputs_reference_demo_data",
+            demo_data is not None and _demo_inputs_reference_demo_data(demo_data),
+            "demo order examples must reference valid demo product_code and customer_id values",
+        )
+    )
     checks.append(_check("demo_runs_offline", _demo_runs_offline(), "high_risk_order.json deterministic run"))
 
     index_text = _read(docs["capstone_index"])
@@ -303,6 +353,32 @@ def _demo_runs_offline() -> bool:
         and payload.get("risk_level") == "high"
         and payload.get("approval_required") is True
     )
+
+
+def _load_demo_data_for_checks() -> dict[str, Any] | None:
+    try:
+        return load_demo_business_data(DEMO_DATA_DIR)
+    except ValueError:
+        return None
+
+
+def _inventory_refs_known_products(demo_data: dict[str, Any]) -> bool:
+    product_codes = {product["product_code"] for product in demo_data["products"]}
+    return all(record["product_code"] in product_codes for record in demo_data["inventory"])
+
+
+def _demo_inputs_reference_demo_data(demo_data: dict[str, Any]) -> bool:
+    product_codes = {product["product_code"] for product in demo_data["products"]}
+    customer_ids = {customer["customer_id"] for customer in demo_data["customers"]}
+    for filename in REQUIRED_DEMO_INPUTS:
+        try:
+            payload = json.loads((DEMO_INPUTS_DIR / filename).read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError):
+            return False
+        context = payload.get("business_context", {})
+        if context.get("product_code") not in product_codes or context.get("customer_id") not in customer_ids:
+            return False
+    return True
 
 
 if __name__ == "__main__":

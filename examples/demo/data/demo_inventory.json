@@ -1,0 +1,112 @@
+[
+  {
+    "product_code": "PRD-SODA-ASH-DENSE",
+    "warehouse": "DXB-MAIN",
+    "on_hand_quantity": 280,
+    "reserved_quantity": 60,
+    "available_quantity": 220,
+    "unit": "MT",
+    "package_description": "1.25 MT bag",
+    "reorder_level": 80,
+    "inventory_status": "healthy"
+  },
+  {
+    "product_code": "PRD-SODIUM-SULPHATE",
+    "warehouse": "BAH-TRANSIT",
+    "on_hand_quantity": 180,
+    "reserved_quantity": 95,
+    "available_quantity": 85,
+    "unit": "MT",
+    "package_description": "1 MT bag",
+    "reorder_level": 70,
+    "inventory_status": "reserved"
+  },
+  {
+    "product_code": "PRD-CITRIC-ACID",
+    "warehouse": "DXB-MAIN",
+    "on_hand_quantity": 144000,
+    "reserved_quantity": 24000,
+    "available_quantity": 120000,
+    "unit": "kg",
+    "package_description": "25 kg x 48 bags",
+    "reorder_level": 36000,
+    "inventory_status": "healthy"
+  },
+  {
+    "product_code": "PRD-TRISODIUM-CITRATE",
+    "warehouse": "DXB-MAIN",
+    "on_hand_quantity": 57500,
+    "reserved_quantity": 11500,
+    "available_quantity": 46000,
+    "unit": "kg",
+    "package_description": "25 kg x 46 bags",
+    "reorder_level": 23000,
+    "inventory_status": "healthy"
+  },
+  {
+    "product_code": "PRD-EMPILAN-APC50",
+    "warehouse": "BAH-TRANSIT",
+    "on_hand_quantity": 6600,
+    "reserved_quantity": 5280,
+    "available_quantity": 1320,
+    "unit": "kg",
+    "package_description": "220 kg/drum",
+    "reorder_level": 2200,
+    "inventory_status": "low_stock"
+  },
+  {
+    "product_code": "PRD-AMMONIUM-SULPHATE",
+    "warehouse": "DHAKA-DEMO",
+    "on_hand_quantity": 75000,
+    "reserved_quantity": 12500,
+    "available_quantity": 62500,
+    "unit": "kg",
+    "package_description": "25 kg x 50 bags",
+    "reorder_level": 25000,
+    "inventory_status": "healthy"
+  },
+  {
+    "product_code": "PRD-SODIUM-BENZOATE",
+    "warehouse": "DXB-MAIN",
+    "on_hand_quantity": 15000,
+    "reserved_quantity": 9500,
+    "available_quantity": 5500,
+    "unit": "kg",
+    "package_description": "25 kg",
+    "reorder_level": 6000,
+    "inventory_status": "low_stock"
+  },
+  {
+    "product_code": "PRD-SORBIC-ACID",
+    "warehouse": "DHAKA-DEMO",
+    "on_hand_quantity": 0,
+    "reserved_quantity": 0,
+    "available_quantity": 0,
+    "unit": "kg",
+    "package_description": "25 kg",
+    "reorder_level": 2500,
+    "inventory_status": "out_of_stock"
+  },
+  {
+    "product_code": "PRD-CALCIUM-CHLORIDE",
+    "warehouse": "BAH-TRANSIT",
+    "on_hand_quantity": 96000,
+    "reserved_quantity": 38400,
+    "available_quantity": 57600,
+    "unit": "kg",
+    "package_description": "25 kg x 48 bags",
+    "reorder_level": 24000,
+    "inventory_status": "reserved"
+  },
+  {
+    "product_code": "PRD-ELTESOL-SC40",
+    "warehouse": "DXB-MAIN",
+    "on_hand_quantity": 14400,
+    "reserved_quantity": 2400,
+    "available_quantity": 12000,
+    "unit": "kg",
+    "package_description": "240 kg",
+    "reorder_level": 4800,
+    "inventory_status": "healthy"
+  }
+]

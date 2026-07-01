@@ -4,8 +4,10 @@
   "workflow_type": "approval_required_decision_path",
   "sales_order_id": "SO-1005",
   "business_context": {
+    "customer_id": "CUST-005",
     "customer_signal": "High-value drop-ship customer order",
     "decision_needed": "Determine whether a purchase order draft requires manager approval",
-    "operator_role": "tradeflow_controller"
+    "operator_role": "tradeflow_controller",
+    "product_code": "PRD-SODIUM-BENZOATE"
   }
 }

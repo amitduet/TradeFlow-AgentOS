@@ -1,0 +1,162 @@
+[
+  {
+    "customer_id": "CUST-001",
+    "customer_name": "Harborline Ingredients FZE",
+    "country": "UAE",
+    "customer_type": "distributor",
+    "credit_limit_usd": 75000,
+    "current_exposure_usd": 18000,
+    "payment_terms": "Net 30",
+    "risk_rating": "low",
+    "contact_person": {
+      "name": "Maya Hassan",
+      "email": "maya.hassan@example.com",
+      "phone": "+971-555-0101",
+      "designation": "Procurement Manager"
+    }
+  },
+  {
+    "customer_id": "CUST-002",
+    "customer_name": "Pearl Coast Trading WLL",
+    "country": "Bahrain",
+    "customer_type": "trader",
+    "credit_limit_usd": 52000,
+    "current_exposure_usd": 22000,
+    "payment_terms": "Net 21",
+    "risk_rating": "medium",
+    "contact_person": {
+      "name": "Omar Alawi",
+      "email": "omar.alawi@example.com",
+      "phone": "+973-3600-0102",
+      "designation": "Commercial Lead"
+    }
+  },
+  {
+    "customer_id": "CUST-003",
+    "customer_name": "Najd Food Ingredients Co.",
+    "country": "Saudi Arabia",
+    "customer_type": "manufacturer",
+    "credit_limit_usd": 90000,
+    "current_exposure_usd": 41000,
+    "payment_terms": "Net 45",
+    "risk_rating": "medium",
+    "contact_person": {
+      "name": "Sara Nasser",
+      "email": "sara.nasser@example.com",
+      "phone": "+966-500-0103",
+      "designation": "Supply Planner"
+    }
+  },
+  {
+    "customer_id": "CUST-004",
+    "customer_name": "Dhaka Process Chemicals Ltd.",
+    "country": "Bangladesh",
+    "customer_type": "manufacturer",
+    "credit_limit_usd": 64000,
+    "current_exposure_usd": 15500,
+    "payment_terms": "Net 30",
+    "risk_rating": "low",
+    "contact_person": {
+      "name": "Farhana Karim",
+      "email": "farhana.karim@example.com",
+      "phone": "+880-1700-0104",
+      "designation": "Operations Buyer"
+    }
+  },
+  {
+    "customer_id": "CUST-005",
+    "customer_name": "Doha Specialty Supplies",
+    "country": "Qatar",
+    "customer_type": "distributor",
+    "credit_limit_usd": 58000,
+    "current_exposure_usd": 53000,
+    "payment_terms": "Net 30",
+    "risk_rating": "high",
+    "contact_person": {
+      "name": "Layla Mansour",
+      "email": "layla.mansour@example.com",
+      "phone": "+974-3300-0105",
+      "designation": "Import Coordinator"
+    }
+  },
+  {
+    "customer_id": "CUST-006",
+    "customer_name": "Muscat Detergent Materials LLC",
+    "country": "Oman",
+    "customer_type": "manufacturer",
+    "credit_limit_usd": 68000,
+    "current_exposure_usd": 26000,
+    "payment_terms": "Net 30",
+    "risk_rating": "medium",
+    "contact_person": {
+      "name": "Yusuf Rahim",
+      "email": "yusuf.rahim@example.com",
+      "phone": "+968-9000-0106",
+      "designation": "Plant Buyer"
+    }
+  },
+  {
+    "customer_id": "CUST-007",
+    "customer_name": "Kuwait Gulf Additives",
+    "country": "Kuwait",
+    "customer_type": "trader",
+    "credit_limit_usd": 47000,
+    "current_exposure_usd": 38500,
+    "payment_terms": "Net 14",
+    "risk_rating": "high",
+    "contact_person": {
+      "name": "Noura Saleh",
+      "email": "noura.saleh@example.com",
+      "phone": "+965-6000-0107",
+      "designation": "Finance Contact"
+    }
+  },
+  {
+    "customer_id": "CUST-008",
+    "customer_name": "Singapore Formulation Hub",
+    "country": "Singapore",
+    "customer_type": "manufacturer",
+    "credit_limit_usd": 110000,
+    "current_exposure_usd": 12000,
+    "payment_terms": "Net 45",
+    "risk_rating": "low",
+    "contact_person": {
+      "name": "Daniel Tan",
+      "email": "daniel.tan@example.com",
+      "phone": "+65-8000-0108",
+      "designation": "Category Manager"
+    }
+  },
+  {
+    "customer_id": "CUST-009",
+    "customer_name": "Riyadh Industrial Blends",
+    "country": "Saudi Arabia",
+    "customer_type": "manufacturer",
+    "credit_limit_usd": 83000,
+    "current_exposure_usd": 36500,
+    "payment_terms": "Net 30",
+    "risk_rating": "medium",
+    "contact_person": {
+      "name": "Faisal Hamad",
+      "email": "faisal.hamad@example.com",
+      "phone": "+966-500-0109",
+      "designation": "Sourcing Manager"
+    }
+  },
+  {
+    "customer_id": "CUST-010",
+    "customer_name": "Chittagong Food Ingredients",
+    "country": "Bangladesh",
+    "customer_type": "distributor",
+    "credit_limit_usd": 43000,
+    "current_exposure_usd": 9000,
+    "payment_terms": "Net 21",
+    "risk_rating": "low",
+    "contact_person": {
+      "name": "Nabila Chowdhury",
+      "email": "nabila.chowdhury@example.com",
+      "phone": "+880-1800-0110",
+      "designation": "Import Buyer"
+    }
+  }
+]

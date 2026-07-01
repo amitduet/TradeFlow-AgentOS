@@ -1,0 +1,82 @@
+[
+  {
+    "product_code": "PRD-SODA-ASH-DENSE",
+    "product_name": "Soda Ash Dense",
+    "unit_package_description": "1.25 MT bag",
+    "base_unit": "MT",
+    "package_size": 1.25,
+    "demo_category": "industrial_chemicals"
+  },
+  {
+    "product_code": "PRD-SODIUM-SULPHATE",
+    "product_name": "Sodium Sulphate",
+    "unit_package_description": "1 MT bag",
+    "base_unit": "MT",
+    "package_size": 1,
+    "demo_category": "industrial_chemicals"
+  },
+  {
+    "product_code": "PRD-CITRIC-ACID",
+    "product_name": "Citric Acid",
+    "unit_package_description": "25 kg x 48 bags",
+    "base_unit": "kg",
+    "package_size": 1200,
+    "demo_category": "food_additives"
+  },
+  {
+    "product_code": "PRD-TRISODIUM-CITRATE",
+    "product_name": "Trisodium Citrate",
+    "unit_package_description": "25 kg x 46 bags",
+    "base_unit": "kg",
+    "package_size": 1150,
+    "demo_category": "food_additives"
+  },
+  {
+    "product_code": "PRD-EMPILAN-APC50",
+    "product_name": "Empilan APC 50",
+    "unit_package_description": "220 kg/drum",
+    "base_unit": "kg",
+    "package_size": 220,
+    "demo_category": "surfactants"
+  },
+  {
+    "product_code": "PRD-AMMONIUM-SULPHATE",
+    "product_name": "Ammonium Sulphate",
+    "unit_package_description": "25 kg x 50 bags",
+    "base_unit": "kg",
+    "package_size": 1250,
+    "demo_category": "fertilizer_inputs"
+  },
+  {
+    "product_code": "PRD-SODIUM-BENZOATE",
+    "product_name": "Sodium Benzoate",
+    "unit_package_description": "25 kg",
+    "base_unit": "kg",
+    "package_size": 25,
+    "demo_category": "food_preservatives"
+  },
+  {
+    "product_code": "PRD-SORBIC-ACID",
+    "product_name": "Sorbic Acid",
+    "unit_package_description": "25 kg",
+    "base_unit": "kg",
+    "package_size": 25,
+    "demo_category": "food_preservatives"
+  },
+  {
+    "product_code": "PRD-CALCIUM-CHLORIDE",
+    "product_name": "Calcium Chloride",
+    "unit_package_description": "25 kg x 48 bags",
+    "base_unit": "kg",
+    "package_size": 1200,
+    "demo_category": "industrial_chemicals"
+  },
+  {
+    "product_code": "PRD-ELTESOL-SC40",
+    "product_name": "Eltesol SC40",
+    "unit_package_description": "240 kg",
+    "base_unit": "kg",
+    "package_size": 240,
+    "demo_category": "surfactants"
+  }
+]

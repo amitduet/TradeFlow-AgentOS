@@ -4,8 +4,10 @@
   "workflow_type": "supplier_logistics_payment_term_risk_analysis",
   "sales_order_id": "SO-1006",
   "business_context": {
+    "customer_id": "CUST-006",
     "customer_signal": "Good customer rating with active procurement fulfillment",
     "decision_needed": "Decide whether logistics follow-up is needed",
-    "operator_role": "supply_chain_ops"
+    "operator_role": "supply_chain_ops",
+    "product_code": "PRD-EMPILAN-APC50"
   }
 }

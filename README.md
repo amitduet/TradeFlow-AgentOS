@@ -4,6 +4,8 @@
 
 TradeFlow AgentOS is ready to review from a clean clone without live credentials, external services, paid APIs, production data, or networked business systems. The default judge path is deterministic and local: it uses synthetic data, deterministic tools, deterministic planner fallback, approval gates, audit records, and reproducible local evidence.
 
+The runnable demo also includes a small sanitized business seed dataset under `examples/demo/data/`: fake products, fictional customers, deterministic inventory records, and a simple USD opening balance. This data is only for Kaggle judging/demo realism; it is not production data and does not require any API key.
+
 Environment assumptions: Python 3.11+ is recommended, with a local virtual environment and the committed development extras installed.
 
 Setup:
@@ -40,6 +42,7 @@ Expected high-risk behavior:
 - Deterministic tool/runbook path: the default planner selects the approved order-risk workflow, uses local synthetic data, and cites deterministic evidence.
 - Approval escalation: the recommended sensitive action remains pending and requires human approval.
 - Guardrail/audit explanation: response fields include approval reason, audit events, evidence refs, trace refs, and deterministic provider metadata.
+- Sanitized business context: response fields include fake customer/product/inventory context from `examples/demo/data/`, including available inventory and demo-only stock signals.
 
 LLM planner mode is optional and opt-in only. The safe default is deterministic fallback; live provider smoke requires explicit local credentials and is skipped by the normal judge path.
 
@@ -58,13 +61,13 @@ git diff --check
 
 Expected release-candidate results:
 
-- Pytest: 150 passed
+- Pytest: 157 passed
 - Planner evals: 10/10 passed
 - Skill evals: 18/18 passed
 - Security evals: 21/21 passed
 - Guardrail/approval workflow evals: 3/3 passed
 - Capstone readiness: 27/27 passed
-- Submission package: 67/67 passed
+- Submission package: 76/76 passed
 - Unified quality gate: 7 passed, 0 failed, 1 skipped
 - Provider smoke: skipped cleanly by default
 
@@ -74,6 +77,7 @@ Submission artifacts:
 - Five-minute video script: `docs/capstone/video_script_5min.md`
 - Media checklist: `docs/capstone/media_gallery_checklist.md`
 - Capstone documentation index: `docs/capstone/README.md`
+- Sanitized demo data: `examples/demo/data/`
 - Evidence pack builder: `scripts/build_release_evidence_pack.py`
 
 TradeFlow AgentOS is a Kaggle AI Agents capstone project for the Agents for Business track. It models a multi-agent trading business control tower that evaluates customer order requests and coordinates Sales, CRM, Inventory, Finance, Purchase, and Logistics agents from order feasibility through delivery confirmation, invoice draft, and receivable follow-up.
@@ -105,13 +109,13 @@ Generate reviewer evidence and the static AgentOps dashboard:
 
 Expected release-candidate results:
 
-- Pytest: 150 passed
+- Pytest: 157 passed
 - Planner evals: 10/10 passed
 - Skill evals: 18/18 passed
 - Security evals: 21/21 passed
 - Guardrail/approval workflow evals: 3/3 passed
 - Capstone readiness: 27/27 passed
-- Submission package: 67/67 passed
+- Submission package: 76/76 passed
 - Unified quality gate: 7 passed, 0 failed, 1 skipped
 - Provider smoke: skipped cleanly by default
 
