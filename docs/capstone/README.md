@@ -17,6 +17,8 @@ This folder contains the reviewer-facing Kaggle capstone package for TradeFlow A
 
 The public judge quickstart lives in the repository [README.md For Kaggle Judges section](../../README.md#for-kaggle-judges).
 
+It documents the clean setup command, full quality gate, high-risk CLI demo, local UI command, local UI URL, deterministic default behavior, optional LLM planner mode, and expected approval/audit behavior for the high-risk scenario.
+
 ## Runnable Demo Flow
 
 Sprint 015 adds a runnable end-user demo path for the capstone review:
@@ -37,8 +39,12 @@ Flow:
 The optional local UI uses the same adapter:
 
 ```bash
-.venv/bin/python scripts/run_tradeflow_agent_demo_ui.py --port 8765
+.venv/bin/python scripts/run_tradeflow_agent_demo_ui.py
 ```
+
+Open `http://127.0.0.1:8765`.
+
+Sprint 016 submission freeze keeps this path local and deterministic: no production data, no external services, no paid API dependency, and no live planner provider unless explicitly opted into by the reviewer.
 
 ## Evidence and Dashboard Generation
 

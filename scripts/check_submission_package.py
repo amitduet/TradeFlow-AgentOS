@@ -16,13 +16,18 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCS_DIR = REPO_ROOT / "docs" / "capstone"
 README = REPO_ROOT / "README.md"
 DEMO_RUNNER = REPO_ROOT / "scripts" / "run_tradeflow_agent_demo.py"
+DEMO_UI_RUNNER = REPO_ROOT / "scripts" / "run_tradeflow_agent_demo_ui.py"
 DEMO_INPUTS_DIR = REPO_ROOT / "examples" / "demo"
 REQUIRED_DEMO_INPUTS = [
     "low_risk_order.json",
     "medium_risk_order.json",
     "high_risk_order.json",
 ]
-DEMO_RUN_COMMAND = "python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json"
+DEMO_RUN_COMMAND = ".venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json"
+DEMO_UI_COMMAND = ".venv/bin/python scripts/run_tradeflow_agent_demo_ui.py"
+DEMO_UI_URL = "http://127.0.0.1:8765"
+QUALITY_GATE_COMMAND = ".venv/bin/python scripts/run_agent_quality_gate.py"
+SETUP_COMMAND = 'pip install -e ".[dev]"'
 REQUIRED_DOCS = {
     "kaggle_writeup": "kaggle_writeup.md",
     "video_script": "video_script_5min.md",
@@ -53,8 +58,22 @@ def run_submission_checks(*, docs_dir: Path = DOCS_DIR, readme_path: Path = READ
     checks.append(
         _check(
             "video_script_has_required_timing_blocks",
-            all(marker in video_text for marker in ["0:00", "0:30", "1:15", "2:15", "3:15", "4:15", "5:00"]),
+            all(marker in video_text for marker in ["0:00", "0:30", "1:15", "2:15", "3:05", "4:05", "4:40", "5:00"]),
             _rel(docs["video_script"]),
+        )
+    )
+    checks.append(
+        _check(
+            "video_script_references_cli_demo_command",
+            DEMO_RUN_COMMAND in video_text,
+            f"{_rel(docs['video_script'])} must include {DEMO_RUN_COMMAND}",
+        )
+    )
+    checks.append(
+        _check(
+            "video_script_references_ui_demo_command",
+            DEMO_UI_COMMAND in video_text and DEMO_UI_URL in video_text,
+            f"{_rel(docs['video_script'])} must include {DEMO_UI_COMMAND} and {DEMO_UI_URL}",
         )
     )
 
@@ -69,13 +88,41 @@ def run_submission_checks(*, docs_dir: Path = DOCS_DIR, readme_path: Path = READ
     checks.append(
         _check(
             "readme_has_demo_run_command",
-            DEMO_RUN_COMMAND in readme_text
-            or ".venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json"
-            in readme_text,
+            DEMO_RUN_COMMAND in readme_text,
+            _rel(readme_path),
+        )
+    )
+    checks.append(_check("readme_has_setup_command", SETUP_COMMAND in readme_text, _rel(readme_path)))
+    checks.append(_check("readme_has_quality_gate_command", QUALITY_GATE_COMMAND in readme_text, _rel(readme_path)))
+    checks.append(_check("readme_has_ui_demo_command", DEMO_UI_COMMAND in readme_text, _rel(readme_path)))
+    checks.append(_check("readme_has_ui_url", DEMO_UI_URL in readme_text, _rel(readme_path)))
+    checks.append(
+        _check(
+            "readme_notes_no_external_services_or_production_data",
+            "external services" in readme_text.lower() and "production data" in readme_text.lower(),
+            _rel(readme_path),
+        )
+    )
+    checks.append(
+        _check(
+            "readme_notes_optional_llm_and_deterministic_default",
+            "llm planner mode is optional" in readme_text.lower()
+            and "deterministic fallback" in readme_text.lower(),
+            _rel(readme_path),
+        )
+    )
+    checks.append(
+        _check(
+            "readme_summarizes_high_risk_behavior",
+            all(
+                phrase in readme_text.lower()
+                for phrase in ["risk classification", "deterministic tool", "approval escalation", "guardrail/audit"]
+            ),
             _rel(readme_path),
         )
     )
     checks.append(_check("demo_runner_exists", DEMO_RUNNER.exists(), _rel(DEMO_RUNNER)))
+    checks.append(_check("demo_ui_runner_exists", DEMO_UI_RUNNER.exists(), _rel(DEMO_UI_RUNNER)))
     for filename in REQUIRED_DEMO_INPUTS:
         path = DEMO_INPUTS_DIR / filename
         checks.append(_check(f"demo_input_exists:{filename}", path.exists(), _rel(path)))
@@ -91,6 +138,59 @@ def run_submission_checks(*, docs_dir: Path = DOCS_DIR, readme_path: Path = READ
             _rel(docs["capstone_index"]),
         )
     )
+    checks.append(
+        _check(
+            "capstone_index_documents_runnable_demo",
+            DEMO_RUN_COMMAND in index_text and DEMO_UI_COMMAND in index_text and DEMO_UI_URL in index_text,
+            _rel(docs["capstone_index"]),
+        )
+    )
+
+    writeup_text = _read(writeup)
+    checks.append(
+        _check(
+            "kaggle_writeup_selects_agents_for_business",
+            "agents for business" in writeup_text.lower(),
+            _rel(writeup),
+        )
+    )
+    checks.append(
+        _check(
+            "kaggle_writeup_mentions_deterministic_and_optional_llm",
+            "deterministic" in writeup_text.lower() and "optional" in writeup_text.lower() and "provider" in writeup_text.lower(),
+            _rel(writeup),
+        )
+    )
+    checks.append(
+        _check(
+            "kaggle_writeup_mentions_evaluation_suite",
+            all(
+                phrase in writeup_text.lower()
+                for phrase in ["planner evals", "skill", "security evals", "approval workflow", "quality gate"]
+            ),
+            _rel(writeup),
+        )
+    )
+
+    media_text = _read(docs["media_checklist"])
+    for phrase in [
+        "README judge quickstart",
+        "CLI high-risk JSON output",
+        "Local UI home page",
+        "Local UI scenario list",
+        "Local UI high-risk result",
+        "Quality gate terminal result",
+        "Capstone readiness",
+        "Submission Package",
+        "Architecture and Evidence",
+    ]:
+        checks.append(
+            _check(
+                f"media_checklist_includes:{_slug(phrase)}",
+                phrase.lower() in media_text.lower(),
+                f"{_rel(docs['media_checklist'])} should list {phrase}",
+            )
+        )
 
     submission_doc_paths = sorted(path for path in docs_dir.glob("*.md")) if docs_dir.exists() else []
     for path in submission_doc_paths:
@@ -163,6 +263,10 @@ def _rel(path: Path) -> str:
         return path.resolve().relative_to(REPO_ROOT).as_posix()
     except ValueError:
         return path.name
+
+
+def _slug(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", value.lower()).strip("_")
 
 
 def _demo_runs_offline() -> bool:
