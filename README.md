@@ -28,6 +28,12 @@ High-risk CLI demo:
 .venv/bin/python scripts/run_tradeflow_agent_demo.py --input examples/demo/high_risk_order.json --json
 ```
 
+If you rerun demos repeatedly while recording, you can clear ignored local runtime state first:
+
+```bash
+rm -f artifacts/demo_runtime/approval_requests.json artifacts/demo_runtime/planner_audit.jsonl
+```
+
 Local UI demo:
 
 ```bash
@@ -67,7 +73,7 @@ Expected release-candidate results:
 - Security evals: 21/21 passed
 - Guardrail/approval workflow evals: 3/3 passed
 - Capstone readiness: 27/27 passed
-- Submission package: 76/76 passed
+- Submission package: 82/82 passed
 - Unified quality gate: 7 passed, 0 failed, 1 skipped
 - Provider smoke: skipped cleanly by default
 
@@ -75,6 +81,8 @@ Submission artifacts:
 
 - Kaggle writeup: `docs/capstone/kaggle_writeup.md`
 - Five-minute video script: `docs/capstone/video_script_5min.md`
+- Five-minute video overview: `docs/capstone/video_overview_5min.md`
+- Recording runbook: `docs/capstone/recording_runbook.md`
 - Media checklist: `docs/capstone/media_gallery_checklist.md`
 - Capstone documentation index: `docs/capstone/README.md`
 - Sanitized demo data: `examples/demo/data/`
@@ -115,7 +123,7 @@ Expected release-candidate results:
 - Security evals: 21/21 passed
 - Guardrail/approval workflow evals: 3/3 passed
 - Capstone readiness: 27/27 passed
-- Submission package: 76/76 passed
+- Submission package: 82/82 passed
 - Unified quality gate: 7 passed, 0 failed, 1 skipped
 - Provider smoke: skipped cleanly by default
 
@@ -127,6 +135,8 @@ Capstone submission references:
 
 - Kaggle writeup: `docs/capstone/kaggle_writeup.md`
 - Five-minute video script: `docs/capstone/video_script_5min.md`
+- Five-minute video overview: `docs/capstone/video_overview_5min.md`
+- Recording runbook: `docs/capstone/recording_runbook.md`
 - Media checklist: `docs/capstone/media_gallery_checklist.md`
 - Evidence pack builder: `scripts/build_release_evidence_pack.py`
 - Capstone documentation index: `docs/capstone/README.md`
